@@ -1,0 +1,160 @@
+{
+"BaseResponse": {
+"Ret": 0,
+"ErrMsg": ""
+}
+,
+"Count": 3,
+"ContactList": [{
+"Uin": 0,
+"UserName": "filehelper",
+"NickName": "文件传输助手",
+"HeadImgUrl": "/cgi-bin/mmwebwx-bin/webwxgeticon?seq=0&username=filehelper&skey=@crypt_272f8ba6_1b290e719ae7a72d8486c8c7dca1770f",
+"ContactFlag": 0,
+"MemberCount": 0,
+"MemberList": [],
+"RemarkName": "",
+"HideInputBarFlag": 0,
+"Sex": 0,
+"Signature": "",
+"VerifyFlag": 0,
+"OwnerUin": 0,
+"PYInitial": "WJCSZS",
+"PYQuanPin": "wenjianchuanshuzhushou",
+"RemarkPYInitial": "",
+"RemarkPYQuanPin": "",
+"StarFriend": 0,
+"AppAccountFlag": 0,
+"Statues": 0,
+"AttrStatus": 0,
+"Province": "",
+"City": "",
+"Alias": "",
+"SnsFlag": 0,
+"UniFriend": 0,
+"DisplayName": "",
+"ChatRoomId": 0,
+"KeyWord": "fil",
+"EncryChatRoomId": "",
+"IsOwner": 0
+}
+,{
+"Uin": 0,
+"UserName": "weixin",
+"NickName": "微信团队",
+"HeadImgUrl": "/cgi-bin/mmwebwx-bin/webwxgeticon?seq=656750251&username=weixin&skey=@crypt_272f8ba6_1b290e719ae7a72d8486c8c7dca1770f",
+"ContactFlag": 3,
+"MemberCount": 0,
+"MemberList": [],
+"RemarkName": "",
+"HideInputBarFlag": 0,
+"Sex": 0,
+"Signature": "微信团队官方帐号",
+"VerifyFlag": 56,
+"OwnerUin": 0,
+"PYInitial": "WXTD",
+"PYQuanPin": "weixintuandui",
+"RemarkPYInitial": "",
+"RemarkPYQuanPin": "",
+"StarFriend": 0,
+"AppAccountFlag": 0,
+"Statues": 0,
+"AttrStatus": 4,
+"Province": "",
+"City": "",
+"Alias": "",
+"SnsFlag": 0,
+"UniFriend": 0,
+"DisplayName": "",
+"ChatRoomId": 0,
+"KeyWord": "wei",
+"EncryChatRoomId": "",
+"IsOwner": 0
+}
+,{
+"Uin": 0,
+"UserName": "fmessage",
+"NickName": "朋友推荐消息",
+"HeadImgUrl": "/cgi-bin/mmwebwx-bin/webwxgeticon?seq=656750255&username=fmessage&skey=@crypt_272f8ba6_1b290e719ae7a72d8486c8c7dca1770f",
+"ContactFlag": 1,
+"MemberCount": 0,
+"MemberList": [],
+"RemarkName": "",
+"HideInputBarFlag": 0,
+"Sex": 0,
+"Signature": "",
+"VerifyFlag": 0,
+"OwnerUin": 0,
+"PYInitial": "PYTJXX",
+"PYQuanPin": "pengyoutuijianxiaoxi",
+"RemarkPYInitial": "",
+"RemarkPYQuanPin": "",
+"StarFriend": 0,
+"AppAccountFlag": 0,
+"Statues": 0,
+"AttrStatus": 32,
+"Province": "",
+"City": "",
+"Alias": "",
+"SnsFlag": 128,
+"UniFriend": 0,
+"DisplayName": "",
+"ChatRoomId": 0,
+"KeyWord": "fme",
+"EncryChatRoomId": "",
+"IsOwner": 0
+}
+],
+"SyncKey": {
+"Count": 4,
+"List": [{
+"Key": 1,
+"Val": 656751011
+}
+,{
+"Key": 2,
+"Val": 656751152
+}
+,{
+"Key": 3,
+"Val": 656751038
+}
+,{
+"Key": 1000,
+"Val": 1510977722
+}
+]
+}
+,
+"User": {
+"Uin": 277928779,
+"UserName": "@d536b525e677352582cdc4fc391f344a75474fd30b454f1900ba1197e1757e1c",
+"NickName": "落qsiti",
+"HeadImgUrl": "/cgi-bin/mmwebwx-bin/webwxgeticon?seq=183178856&username=@d536b525e677352582cdc4fc391f344a75474fd30b454f1900ba1197e1757e1c&skey=@crypt_272f8ba6_1b290e719ae7a72d8486c8c7dca1770f",
+"RemarkName": "",
+"PYInitial": "",
+"PYQuanPin": "",
+"RemarkPYInitial": "",
+"RemarkPYQuanPin": "",
+"HideInputBarFlag": 0,
+"StarFriend": 0,
+"Sex": 0,
+"Signature": "",
+"AppAccountFlag": 0,
+"VerifyFlag": 0,
+"ContactFlag": 0,
+"WebWxPluginSwitch": 0,
+"HeadImgFlag": 0,
+"SnsFlag": 1
+}
+,
+"ChatSet": "filehelper,weixin,fmessage,",
+"SKey": "@crypt_272f8ba6_1b290e719ae7a72d8486c8c7dca1770f",
+"ClientVersion": 637866038,
+"SystemTime": 1510992055,
+"GrayScale": 1,
+"InviteStartCount": 40,
+"MPSubscribeMsgCount": 0,
+"MPSubscribeMsgList": [],
+"ClickReportInterval": 600000
+}
