@@ -1,0 +1,124 @@
+正则
+>>> re.split(r'\s+',t)			#re的split
+['', 'foo', 'bar', 'baz', 'qux']
+>>> t='''   foo              bar
+                 baz
+                        \tqux'''
+>>> re.split(r'\s+',t)
+['', 'foo', 'bar', 'baz', 'qux']
+>>> re.sub(r'\s+','---',t)		#re的sub，还有个subn可以替换前n个
+'---foo---bar---baz---qux'
+-------------------------------------------------------------------------
+match从头匹配，search全文匹配
+r=re.compile(r'.(4.)')
+s=r.search/findall(str)
+s.group()/s.group(1)
+r'^((?![A-Z]).)*$'                 匹配不含有大写字母的字符串
+>>> re.match(r'^(\d+)(0*)$', '102300').groups()
+('102300', '')
+>>> re.match(r'^(\d+?)(0*)$', '102300').groups()
+('1023', '00')   ?采用非贪婪匹配
+各种库
+>>> from collections import defaultdict
+>>> dd = defaultdict(lambda: 'N/A')
+>>> dd['key2'] # key2不存在，返回默认值
+'N/A'
+================================================= ===========
+"p_id": "523407",                                                  #让.匹配换行
+"p_name": "【自营】福建平和白心手掰柚4个礼盒装 ",
+"p_brand": "好乐格",
+"p_price": "43.9",
+re2=re.compile(r'p_name": "(.*?)".*?"p_price": "(.*?)"',flags=re.S)
+在compile里设置re.S，在search里设置似乎无效
+===================================================
+>>> collections.Counter('我的是我的，你的还是我的')
+Counter({'的': 4, '我': 3, '是': 2, '还': 1, '，': 1, '你': 1})
+===================================================
+Base64用\x00字节在末尾补足后，再在编码的末尾加上1个或2个=号，表示补了多少字节，解码的时候，会自动去掉（最后带等号的是base64编码）
+因为Base64是把3个字节变为4个字节，所以，Base64编码的长度永远是4的倍数，因此，需要加上=把Base64字符串的长度变为4的倍数，就可以正常解码了
+base64.b64encode只能编码字符(bytes)，base64.b64decode能解码字符/字符串
+================================================================
+先用qt creator画界面，数字输入用double spin box，设置最大最小值，文本输入输出用text edit，f4创建（行动））？？
+保存，cmd里运行pyuic5 -o  ？？.py ？？.ui，创建py
+py里更改各行动的函数名（self.c，不要括号），创建对应函数（没有参数的要加入self 参数）
+double spin box输入输出都是float，用text输出要变格式，输入用value()，
+text edit输入用toPlainText()，输出用toText()
+在最后粘贴
+if __name__ == "__main__":
+    import sys
+    app = QtWidgets.QApplication(sys.argv)
+    MainWindow = QtWidgets.QMainWindow()
+    ui = Ui_MainWindow()
+    ui.setupUi(MainWindow)
+    MainWindow.show()
+    sys.exit(app.exec_())
+==================================================================
+from email.mime.text import MIMEText     报错500换ip（收件人找不到）
+from email.header import Header
+import smtplib
+msg = MIMEText('大家好', 'plain', 'utf-8')
+msg['Subject'] = '来自SM11TP的问候……'
+msg['From'] = 'yukitosairi2@163.com'    
+msg['To'] = "17181370591@sina.cn"
+password ='*****'
+smtp_server ='smtp.163.com'
+server = smtplib.SMTP(smtp_server, 25) # SMTP协议默认端口是25
+server.set_debuglevel(1)
+server.login(msg['From'], password)
+server.sendmail(msg['From'],msg['To'], msg.as_string())
+server.quit()
+================================================================================================================
+#hello.py
+def application(environ, start_response):
+    headers= [('Content-Type', 'text/html'),('cookies','chifan')]                          服务器返回的response headers的内容
+    start_response('200 OK',headers)                                                              返回状态码和reason
+    body = '<h1>Hello, {}!</h1>'.format(environ['PATH_INFO'][1:]) or 'web'
+    return [body.encode('utf-8')]							在hello.py里定义application
+# server.py											
+# 从wsgiref模块导入:
+from wsgiref.simple_server import make_server
+# 导入我们自己编写的application函数:
+from hello import application
+# 创建一个服务器，IP地址为空，端口是8000，处理函数是application:
+httpd = make_server('', 8000, application)                           localhost的8000端口
+print('Serving HTTP on port 8000...')
+# 开始监听HTTP请求:
+httpd.serve_forever()                                              
+=====================================================================================
+from requests import get
+def f():
+    n=0
+    rea=''
+    while True:        
+        y=yield rea                                   后运行到这一行前停止，并返回rea，y=send的参数；
+        url='https://bbs.hupu.com/20416180-{}.html'.format(y)
+        print(url)
+        rea=len(get(url).text)
+def ff(f):
+    print(f.send(None),'t')
+    for i in range(1,9):
+        rea=f.send(i)
+        print(rea)     
+ff(f())                                     协程。。。。。
+===========================================================
+aiohttp在异步相关文件夹
+=========================================================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
