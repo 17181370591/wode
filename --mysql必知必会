@@ -1,0 +1,86 @@
+select    ??    from    ?table?	order   by    列x（desc），列y（desc）   limit    a	   offset	b;
+按列x（x值相同再按列y）排序，取a个值，从b行开始
+order是最后一个子句
+(limit a offset b=limit b,a)
+offset b指从b行开始搜索，第一行b=0；
+where ?? (not) between a and b;
+大于a小于b
+select  * from produCTS where (vend_id="DLL01" or vend_id='fng01') and prod_price>4
+（=select  * from produCTS where vend_id in("DLL01","fng01") and prod_price>4）
+先计算括号内
+like 'Fish%goo%'以fish开头，含有goo（可以在末尾），
+是否区分大小写取决于dbms，%表示任意字符出现任意次（包括0），不匹配null
+like ' __ '匹配两个空格间有两个字符，_表示单个字符
+mysql不能在like后接[]，需要用（not） regexp，用法和python很像
+select concat(trim(both 'B' from vend_name),' (',trim(vend_country),')') as vend_tiTle from vendors order by vend_name;
+删除vendname两边的‘B’和vendcounty两边的空格，连接，列名叫vend_tiTle，区分大小写
+cast(a as type)
+convert(a,type)
+left/right(str, length)；replace('123123','1','aa');
+substring(str, pos); substring(str, pos, len)
+substring_index(str,delim,count)取str第count个delim的前面，找不到就返回str
+length()
+聚集函数：sum()，avg()，max/min()只能计算单列,count()对单列计算时忽略null，count(*)计算null
+select vend_id,count(*) from products where prod_price>4 group by vend_id having count(*)>2;
+products里价格大于4，vend_id相同行的行数和大于2
+select cust_name,(select count(*) from orders where cust_id=customers.cust_id) from customers;
+括号里是子查询，同cust_name一样返回单个值
+select vend_name,prod_name,prod_price ,quantity from orderitems,products,vendors where products.vend_id=vendors.vend_id
+and orderitems.prod_id=products.prod_id and order_num=20007;
+从三个表取三个条件的值（join的表越多速度越慢）
+select order_num,c.cust_name,c.cust_id  from orders as o left/right outer join customers as c on o.cust_id=c.cust_id;
+外联结，其中一个表的全部行会出现，如果另一个表没有对应项会赋值null，内联结则不会出现该行
+unoin的两项需要列数相同，类型相同，列标题一样的情况下需要顺序相同
+union会去重复行，union all不会
+insert into ?? (?,....) value(?,.....)
+insert into ?? (?,....)  select (?,...) from ??
+create table custcopy select c.cust_id,order_num from customers as c,orders;
+update customers set  cust_email='@@@' where cust_id=''；
+delete from customers where ......;truncate可以删除整个表的数据
+先select查询再delete/update，防止出错
+SET FOREIGN_KEY_CHECKS = 0;关闭外键检查
+SET SQL_SAFE_UPDATES = 0;可以修改和删除
+desc customers;看表信息
+CREATE TABLE Orders(
+Id_O int NOT NULL,OrderNo int NOT NULL,Id_P int,
+OrderDate datetime DEFAULT now());创建table
+create view ?? as select  ?? from ??;创建view
+drop procedure if exists aaa;创建procedure
+delimiter //
+create procedure aaa(a1 int)
+begin
+declare b1 int;                              # declare必须在begin和end间，而且是第一行
+select count(*) into b1 from table1;#保存count（*）到b1
+set a1=a1+b1;
+select a1;
+end//
+call aaa(3);
+drop procedure if exists aaa;			#如果存在则删除
+delimiter //						#用//代替；
+create procedure aaa(in aa char(111))	
+begin 
+	set @aa1=concat('select * from ', aa);
+    select @aa1;
+    PREPARE aa1 FROM @aa1;  
+    EXECUTE aa1;  
+    #DEALLOCATE PREPARE stmt;    #不要也行？
+end//
+call aaa('orderitems');
+delimiter ；				#换回；
+drop procedure if exists aaa;
+delimiter //
+create procedure aaa(out aa char(111))
+begin     set aa=3;     
+end//     delimiter ;
+call aaa(@e);
+select @e;
+
+
+
+
+
+
+
+
+
+
