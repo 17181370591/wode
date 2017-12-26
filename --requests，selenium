@@ -1,0 +1,63 @@
+>>> import string
+>>> string.punctuation
+!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~          		符号
+import requests
+url='http://www.chuantu.biz/upload.php'
+data={。。。。。。。}
+file={'uploadimg':open(r'g://1488157860(1).png','rb')}
+re=requests.post(url,files=file)
+print(re.content.decode('utf-8'))				上传图片
+requests.get(url,pamas={}，cookies=re.cookies）				用之前cookies
+=======================================================
+se=requests.Session()
+params={'username':'username','password':'password'}
+s=se.post(url,params)
+print(s.cookies.get_dict())
+s1=se.get(url1)
+print(s1.contnet.decode('utf-8'))						持续跟踪会话信息
+###########requests添加cookies： r.cookies[:'BAIDUID']=['********']
+headers={'user-agent':'Mozilla/5.0(Macintosh;IntelMacOSX10_7_0)AppleWebKit/\
+535.11(KHTML,likeGecko)Chrome/17.0.963.56Safari/535.11'}
+se=requests.session()
+url='https://www.baidu.com'
+r=se.get(url,headers=headers)
+p=se.cookies									se会自动使用cookies
+p['BAIDUID']='******1'
+p['BDUSS']='*******'
+r2=se.get('https://zhidao.baidu.com')
+print(r2.text)					也可以直接用requests来get，需要手动添加r.cookies
+=======================================================================
+driver = webdriver.Chrome()														
+driver.get("http://www.baidu.com")								预先打开百度，获取部分参数
+driver.add_cookie({'name':'BAIDUID','value':'********'})				添加cookies
+driver.add_cookie({'name':'BDUSS','value':‘******‘’’})		
+####BDUSS应该是密码，且与浏览器有关。可以用chrome抓包密码，再用chrome的ua的模拟登录
+driver.refresh()												刷新
+print(driver.page_source)
+=====================================================================
+京东需要TrackID，thor，ceshi3
+方法是登录前用fiddler抓一次a，登录后抓一次b，打开其他页面抓一次c
+cookies里a到b增加和改变的项里，选bc都有的项。注意用抓取浏览器的ua
+==========================================================================
+selenium抓取天猫的cookie处理：        #此处应该用requests.session
+z=[{'domain': '.taobao.com', 'expiry': 1896134.4, 'httpOnly': False, 'name': 'l', 'path': '/', 'secure': False, 'value': 'Aq2teVozzzkgFBOb//6D9fO-PUInCuHc'}, {'domain': '.taobao.com', 'httpOnly': False, 'name': '_tb_token_', 'path': '/', 'secure': False, 'value': '3d73fa57b1851'}, {'domain': '.taobao.com', 'expiry': 1517844.3744506831, 'httpOnly': False, 'name': 't', 'path': '/', 'secure': False, 'value': '88f554fb310149618f6c925a3ce199bf'}, {'domain': '.taobao.com', 'expiry': 1825428.375, 'httpOnly': False, 'name': 'cna', 'path': '/', 'secure': False, 'value': 'qb6IEii+1jYCASox6Yf0F0TZ'}, {'domain': '.taobao.com', 'httpOnly': True, 'name': 'cookie2', 'path': '/', 'secure': False, 'value': '17f64e35c203dddc4a9d0f64a234ec50'}, {'domain': '.taobao.com', 'httpOnly': False, 'name': 'v', 'path': '/', 'secure': False, 'value': '0'}, {'domain': 'passport.taobao.com', 'httpOnly': True, 'name': 'tmp0', 'path': '/', 'secure': False, 'value': 'ss05Y%2BTUt15%2FT5%2FoRG948MACHZ2rQOO6jvdmPq8sN3qodEquqXUHFfYljvm29rFrad7FI%2FlcPAS0nGJp6IR32wVQaToF5qbhfRuXCsGJOBQ1BA9FUZ9Y1e3M0s53jcOtZcuz8tEAcOmLn2s%2BxWlZzcY%2FwJxFtwZgMGrOJgRx9d1ouxjfKhI460KPXM8Ia9eYJPeX60u6khvJKgmOm68YOg%3D%3D'}, {'domain': 'passport.taobao.com', 'httpOnly': True, 'name': 'JSESSIONID', 'path': '/', 'secure': False, 'value': 'Q5YK3P9V-TNNP558FPGTEX016Z3DK3-Q3RQRP9J-71UP'}, {'domain': '.taobao.com', 'expiry': 1525620.392, 'httpOnly': False, 'name': 'isg', 'path': '/', 'secure': False, 'value': 'ApOTxsabzbsBpIHv5Xh-3uXaIhdxjicKx6fLokWw77LpxLNmzRi3WvGWiIJR'}, {'domain': 'passport.taobao.com', 'httpOnly': False, 'name': 'ivActionType', 'path': '/', 'secure': False, 'value': 'login_check'}, {'domain': 'passport.taobao.com', 'httpOnly': True, 'name': 'siv20', 'path': '/', 'secure': False, 'value': 'sq5nUMwOLYORQhx2JKnR7t38Ji9Rc%2F2AofQpv6ZvjhTiNtWyNpTdQY3CvVoG5a3BUBiWKry12lyh79GFAtd7YQ%3D%3D'}]
+c={}
+rr=r'https://list.tmall.com/search_product.htm?spm=a3204.7139825.1996500281.1.mcFRLY&user_id=725677994&cat=51454011&active=1&style=g&acm=lb-zebra-27092-331834.1003.4.457096&sort=td&scm=1003.4.lb-zebra-27092-331834.OTHER_14434945515601_457096&industryCatId=51462017#J_Filter'
+for i in z:
+    c[i['name']]=i['value']
+c={'l': 'Aq2teVozzzkgFBOb//6D9fO-PUInCuHc', '_tb_token_': '3d73fa57b1851', 't': '88f554fb310149618f6c925a3ce199bf', 'cna': 'qb6IEii+1jYCASox6Yf0F0TZ', 'cookie2': '17f64e35c203dddc4a9d0f64a234ec50', 'v': '0', 'tmp0': 'ss05Y%2BTUt15%2FT5%2FoRG948MACHZ2rQOO6jvdmPq8sN3qodEquqXUHFfYljvm29rFrad7FI%2FlcPAS0nGJp6IR32wVQaToF5qbhfRuXCsGJOBQ1BA9FUZ9Y1e3M0s53jcOtZcuz8tEAcOmLn2s%2BxWlZzcY%2FwJxFtwZgMGrOJgRx9d1ouxjfKhI460KPXM8Ia9eYJPeX60u6khvJKgmOm68YOg%3D%3D', 'JSESSIONID': 'Q5YK3P9V-TNNP558FPGTEX016Z3DK3-Q3RQRP9J-71UP', 'isg': 'ApOTxsabzbsBpIHv5Xh-3uXaIhdxjicKx6fLokWw77LpxLNmzRi3WvGWiIJR', 'ivActionType': 'login_check', 'siv20': 'sq5nUMwOLYORQhx2JKnR7t38Ji9Rc%2F2AofQpv6ZvjhTiNtWyNpTdQY3CvVoG5a3BUBiWKry12lyh79GFAtd7YQ%3D%3D'}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
