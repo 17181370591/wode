@@ -1,0 +1,48 @@
+async def hello():     
+    async with ClientSession() as session:         
+        async with session.get("http://httpbin.org/headers") as response:    
+   print(response.reason)                         打印reason
+            res = await response.read()                         
+            print(await response.read()  )         与下个函数返回值一样
+  
+loop = asyncio.get_event_loop() 
+loop.run_until_complete(hello())
+或者
+async def hello(url):     
+async with aiohttp.get(url) as response:      
+   print(response.status)             打印status_code
+        res = await response.read()                         
+        print(res)                               res是页面内容，response是？？？
+ tasks=[] 
+loop = asyncio.get_event_loop()    			
+for i in urls:					爬取多个网页
+tasks.append(aiohttp.ensure.future(hello(i))     
+loop.run_until_complete(asyncio.wait(tasks))       
+===============================================================================================
+import asyncio ,aiohttp,time,requests,re     			konnachan下载测试
+from aiohttp import ClientSession 
+from bs4 import BeautifulSoup
+url='http://konachan.net/post?page={}&tags=swimsuit'
+async def f(url,i):
+    async with aiohttp.get(url.format(i)) as aio:
+        aior=await aio.read()
+        t=BeautifulSoup(aior,'lxml')
+        print(len(t))
+        res=t.findAll(lambda i: 'alt' in i.attrs and 'title' in i.attrs)
+        print(len(res))
+        res1=['http:'+i.attrs['src'] for i in res]
+        for i in res1:
+            name=i.split(r'/')[-1]
+            with open('g://1/{}'.format(name),'wb') as f:
+                async with  aiohttp.get(i) as ii:
+                    iii=await ii.read()
+                    f.write(iii)
+ta=[asyncio.ensure_future(f(url,i)) for i in range(11)]    
+loop=asyncio.get_event_loop()
+loop.run_until_complete(asyncio.wait(ta))
+
+
+
+
+
+
