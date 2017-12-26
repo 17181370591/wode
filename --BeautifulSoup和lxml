@@ -1,0 +1,31 @@
+其他方法：
+1，看有没有更友好的移动版，换地址和ua,移动版往往没有广告和flash
+2，寻找隐藏在js的信息
+3，网页标题可能在url里
+4，其他网站可能有一样的信息
+findAll/find('a',{'id'='num'})  				  寻找所有属性id=num的a，返回列表，find找第一个
+next_sibling/next_element   				 下一个兄弟节点/节点，都包括'\n'
+res=t.findAll(re.compile(r'.*'),{'class':re.compile(r'floor')})    					找class含有floor的所有标签
+a.attrs			返回标签a的所有属性
+res=t.findAll(lambda i:'class' in i.attrs)          		寻找含有class属性的
+res=t.findAll(lambda i:len(i.attrs)=2)				寻找属性值是两个的
+=========================================================================================
+from lxml import etree
+page1=requests.get(url).text
+page=etree.HTML(page1)							/查找下一层子元素，//查找所有元素
+re1=page.xpath(r'//a[@class="floornum"]')         		//查找所有a，a有class属性且值为floornum
+re2=page.xpath(r'//@href|//meta/@href')							返回所有href的值的列表和meta标签的href值
+re3=page.xpath(r'//*[@class]')							返回含有class属性的所有标签
+for i in re1:
+print(i.attrib,i.text)						返回i的属性：值得字典和i的文本
+n=i.xpath("text()")[-1].strip()			查找i下的文本，包括子标签的
+xpath(“//div[starts-with(@class,”login”) and contains(@id,’user’)]”)表示div的class属性以login开头且id属性包含user
+
+
+
+
+
+
+
+
+
