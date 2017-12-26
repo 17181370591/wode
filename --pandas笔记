@@ -1,0 +1,957 @@
+ch02-1
+f=open(r'C:\Users\Administrator\Desktop\pydata-book-master\ch02\usagov_bitly_data2012-03-16-1331923249.txt','r')
+f1=csv.reader(f)                        
+lines=f.readlines()                     #不能用read（）
+records=[json.loads(i) for i in lines]          #将json转为list对象
+time_zones=[i['tz'] for i in records if 'tz' in i]      #生成tz的list，且不会出现keyerrer
+cc=Counter(time_zones)          #对tz进行计数，类似mysql的group by，返回类似dict对象
+frame=pd.DataFrame(records)     #生成pd的dataframe对象
+frame.to_csv('1.csv')           #保存
+tz_counts=frame['tz'].value_counts()     #pandas的Counter方法，返回series
+res=[x for x in frame.a.dropna()]                   #取去掉空项的frame里a列（series）
+res1=pd.Series([x.split()[0] for x in frame.a.dropna()])   #然后将剩余项按空格切割，选第一部分
+cframe=frame[frame.a.notnull()]                     #取 去掉空项的frame（dataframe）            
+opera_s=np.where(cframe['a'].str.contains('indows'),'windows','not windows')
+#where：条件，真值，价值，相当于三目运算符a:b?c，series有str，dataframe没有
+by_tz_os=cframe.groupby(['tz',opera_s])             #用tz和opera_s分组cframe
+agg_counts=by_tz_os.size().unstack().fillna(0)
+================================================================================================================
+ch02-2
+unames=['user_id','gender','age','occupation','zip']
+rnames=['user_id','movie_id','rating','timestamp']
+mnames=['movie_id','title','genres']
+users=pd.read_table(r'C:\Users\Administrator\Desktop\pydata-book-master\ch02\movielens\users.dat',names=unames,sep='::',engine='python')
+ratings=pd.read_table(r'C:\Users\Administrator\Desktop\pydata-book-master\ch02\movielens\ratings.dat',names=rnames,sep='::',engine='python')
+movies=pd.read_table(r'C:\Users\Administrator\Desktop\pydata-book-master\ch02\movielens\movies.dat',names=mnames,sep='::',engine='python')
+data=pd.merge(pd.merge(users,ratings),movies)           #3表合一
+mean_ratings=data.pivot_table(index='title',columns='gender',values='rating',aggfunc=np.mean)
+    #数据透析表，aggfunc必须，np.mean表示重复项取平均值，pivot不能重复项
+ratings_by_title=data.groupby('title').size()        #
+active_titles=ratings_by_title.index[ratings_by_title>=250]     #都可以
+active_titles=ratings_by_title.index[ratings_by_title.values>=250]  #都可以
+active_titles=ratings_by_title[ratings_by_title>=250].index     #都可以
+mean_ratings=mean_ratings.ix[active_titles]
+    #也可用loc，ix功能完全覆盖loc，index不是数字时还会用数字索引查找
+mean_ratings['diff']=mean_ratings['M']-mean_ratings['F']
+mean_ratings.sort_values(by=mean_ratings['diff'])
+================================================================================================================
+>>> d1
+   a   b  c
+0  0  10  h
+1  1  11  d
+2  2  12  s          
+>>> a=pd.Series({0:'z',1:'zz',3:33})
+>>> d1['e']=a
+>>> d1
+   a   b  c    d    e
+0  0  10  h    z    z
+1  1  11  d   zz   zz
+2  2  12  s  NaN  NaN
+======================================
+>>> f=pd.DataFrame([[None,2.4,2.9],[1.5,1.7,3.6]],index=('Nevada','Ohio'),columns=(2000,2001,2002)).T
+>>> f
+      Nevada  Ohio
+2000     NaN   1.5
+2001     2.4   1.7
+2002     2.9   3.6
+>>> f['Ohio'][:-1]
+2000    1.5
+2001    1.7
+Name: Ohio, dtype: float64
+>>> type(f['Ohio'][:-1])
+<class 'pandas.core.series.Series'>
+>>> f1=pd.DataFrame({'OO':f['Ohio'][:-1]})
+>>> f1
+       OO
+2000  1.5
+2001  1.7
+>>> type(f1)
+<class 'pandas.core.frame.DataFrame'>
+>>> f1=pd.DataFrame({'OO':f['Ohio'][:-1],'11':f['Nevada'][:-1]})
+>>> f1
+       11   OO
+2000  NaN  1.5
+2001  2.4  1.7
+>>> type(f1)
+<class 'pandas.core.frame.DataFrame'>		#用series合成dataframe时，如果没有显性的制定index，series的index会变成dataframe的index
+=====================================================================
+可以往dataframe填充的数据：
+2维ndarray
+由数组，列表或元祖组成的字典  ：每个序列变成dataframe的一列，所以序列的长度必须相同
+numpy的结构化/记录数组 ： 类似于“由数组组成的字典”
+由series组成的字典 
+由字典组成的字典
+字典或者series的列表 ：各项将成为df的一行。字典键或series索引的并集将成为df的列标
+由列表或元祖组成的列表 ：类似于2维ndarray
+另一个df 
+numpy的maskedarray
+>>> pd.DataFrame({'c':['c1','c2'],'d':['d1','d2']})
+    c   d
+0  c1  d1
+1  c2  d2
+>>> pd.DataFrame({'c':{'a':range(4)},'d':{'b':range(4)}})
+====================================================================
+>>> pd.DataFrame({'c':{'a':range(4)},'d':{'b':range(4)}}).reindex(['a','b','c,'],fill_value='bakas')
+               c             d
+a   (0, 1, 2, 3)           NaN
+b            NaN  (0, 1, 2, 3)
+c,         bakas         bakas
+z= pd.DataFrame({'c':['c1','c2'],'d':['d1','d2']})
+>>> z.reindex(columns=['c','dd','ee'],index=[0,'a','c'],fill_value='asd')
+     c   dd   ee
+0   c1  asd  asd
+a  asd  asd  asd
+c  asd  asd  asd
+=========================================================================
+>>> z=pd.DataFrame([np.arange(5),np.arange(5)],columns=[chr(i) for i in range(97,102)],index=['AA','BB'])
+>>> z
+    a  b  c  d  e
+AA  0  1  2  3  4
+BB  0  1  2  3  4
+>>> z.drop('AA')
+    a  b  c  d  e
+BB  0  1  2  3  4
+>>> z.drop(['b','e'],axis=1)
+    a  c  d
+AA  0  2  3
+BB  0  2  3
+z.ix[1,2]==2     #不能使用z[1,2]和z.loc[1,2]
+>>> z.ix[1:,'b':'d']      # #不能使用z[1,2]和z.loc[1,2]
+    b  c  d
+BB  1  2  3
+>>> z.ix['AA','d':]
+d    3
+e    4
+Name: AA, dtype: int64
+=================================================
+>>> obj=pd.Series(np.arange(5),index=[chr(i) for i in range(97,102)])
+>>> obj
+a    0
+b    1
+c    2
+d    3
+e    4
+dtype: int32
+>>> obj['a']
+0
+>>> obj[1]
+1
+>>> obj[4]
+4
+=====================================================
+>>> d1=pd.DataFrame(np.arange(9).reshape((3,3)),columns=list('bsd'),index=('aaa','bbb','ccc'))
+>>> d2=pd.DataFrame(np.arange(12).reshape((4,3)),columns=list('bde'),index=('aaa','qqq','ccc','www'))
+>>> d1
+     b  s  d
+aaa  0  1  2
+bbb  3  4  5
+ccc  6  7  8
+>>> d2
+     b   d   e
+aaa  0   1   2
+qqq  3   4   5
+ccc  6   7   8
+www  9  10  11
+>>> d1+d2
+        b     d   e   s
+aaa   0.0   3.0 NaN NaN
+bbb   NaN   NaN NaN NaN
+ccc  12.0  15.0 NaN NaN
+qqq   NaN   NaN NaN NaN
+www   NaN   NaN NaN NaN
+>>> d1.reindex(columns=list('aqwwerqwrd'))
+      a   q   w   w   e   r   q   w   r  d
+aaa NaN NaN NaN NaN NaN NaN NaN NaN NaN  2
+bbb NaN NaN NaN NaN NaN NaN NaN NaN NaN  5
+ccc NaN NaN NaN NaN NaN NaN NaN NaN NaN  8
+add:+ 	sub:- 	div:/		mul : *
+============================================================
+>>> f=pd.DataFrame(np.arange(12).reshape((4,3)),columns=list('bde'),index=('s1','s2','s3','s4'))
+>>> f
+    b   d   e
+s1  0   1   2
+s2  3   4   5
+s3  6   7   8
+s4  9  10  11
+>>> s=pd.Series(f.ix[0],index=list('bez'))
+>>> s
+b    0.0
+e    2.0
+z    NaN
+Name: s1, dtype: float64
+>>> s1=pd.Series(range(3),index=list('bez'))
+>>> s1
+b    0
+e    1
+z    2
+dtype: int64
+>>> f+s1
+      b   d     e   z
+s1  0.0 NaN   3.0 NaN
+s2  3.0 NaN   6.0 NaN
+s3  6.0 NaN   9.0 NaN
+s4  9.0 NaN  12.0 NaN
+=================================================================
+>>> f.d
+s1     1
+s2     4
+s3     7
+s4    10
+Name: d, dtype: int32
+>>> f-f.d
+     b   d   e  s1  s2  s3  s4
+s1 NaN NaN NaN NaN NaN NaN NaN
+s2 NaN NaN NaN NaN NaN NaN NaN
+s3 NaN NaN NaN NaN NaN NaN NaN
+s4 NaN NaN NaN NaN NaN NaN NaN
+>>> f.sub(d)
+Traceback (most recent call last):
+  File "<pyshell#78>", line 1, in <module>
+    f.sub(d)
+NameError: name 'd' is not defined
+>>> f.sub(f.d)
+     b   d   e  s1  s2  s3  s4
+s1 NaN NaN NaN NaN NaN NaN NaN
+s2 NaN NaN NaN NaN NaN NaN NaN
+s3 NaN NaN NaN NaN NaN NaN NaN
+s4 NaN NaN NaN NaN NaN NaN NaN
+>>> f.sub(f.d,axis=1)
+     b   d   e  s1  s2  s3  s4
+s1 NaN NaN NaN NaN NaN NaN NaN
+s2 NaN NaN NaN NaN NaN NaN NaN
+s3 NaN NaN NaN NaN NaN NaN NaN
+s4 NaN NaN NaN NaN NaN NaN NaN
+>>> f.sub(f.d,axis=0)
+    b  d  e
+s1 -1  0  1
+s2 -1  0  1
+s3 -1  0  1
+s4 -1  0  1
+===================================================
+>>> f=pd.DataFrame((np.random.rand(12)*2-1).reshape((4,3)),columns=list('bde'),index=('s1','s2','s3','s4'))		#其他方法忘了
+>>> f
+           b         d         e
+s1  0.043985 -0.681200  0.701917
+s2  0.179816 -0.575596  0.688593
+s3  0.671616 -0.901586 -0.513030
+>>> f=pd.DataFrame(np.random.randn(4,3),columns=list('bde'),index=list('zxcv'))
+>>> f
+          b         d         e
+z -0.401362  0.234219 -0.189323
+x  0.378164  0.041599  1.506027
+c  0.826772  0.043415  0.305767
+v  1.873741 -0.002498  0.907732
+>>> f.apply(func=lambda x:x.max()-x.min())
+b    2.275102
+d    0.236717
+e    1.695350
+dtype: float64
+>>> f.apply(func=lambda x:x.max()-x.min(),axis=1)
+z    0.635581
+x    1.464428
+c    0.783358
+v    1.876238
+dtype: float64
+>>> f.apply(func=lambda x:x.max()-x.min(),axis=0)
+b    2.275102
+d    0.236717
+e    1.695350
+dtype: float64
+>>> def ff(x):
+	return pd.Series([x.max(),x.min()])
+
+>>> f.apply(ff,axis=1)
+          0         1
+z  0.234219 -0.401362
+x  1.506027  0.041599
+c  0.826772  0.043415
+v  1.873741 -0.002498
+>>> f.apply(ff,axis=0)
+          b         d         e
+0  1.873741  0.234219  1.506027
+1 -0.401362 -0.002498 -0.189323
+>>> f.sort_index('columns',ascending=False)
+          e         d         b
+z -0.189323  0.234219 -0.401362
+x  1.506027  0.041599  0.378164
+c  0.305767  0.043415  0.826772
+v  0.907732 -0.002498  1.873741
+>>> f.sort_index(axis=1,ascending=False)
+          e         d         b
+z -0.189323  0.234219 -0.401362
+x  1.506027  0.041599  0.378164
+c  0.305767  0.043415  0.826772
+v  0.907732 -0.002498  1.873741
+>>> f
+          b         d         e
+z -0.401362  0.234219 -0.189323
+x  0.378164  0.041599  1.506027
+c  0.826772  0.043415  0.305767
+v  1.873741 -0.002498  0.907732
+>>> f.rank(axis=0)
+     b    d    e
+z  1.0  4.0  1.0
+x  2.0  2.0  4.0
+c  3.0  3.0  2.0
+v  4.0  1.0  3.0
+>>> f.rank(axis=1,ascending=False)
+     b    d    e
+z  3.0  1.0  2.0
+x  2.0  3.0  1.0
+c  1.0  3.0  2.0
+v  1.0  3.0  2.0
+=====================================================
+>>> f=pd.DataFrame([[1.4,None],[7.1,-4.5],[None,None],[0.75,-1.3]],index=list('abcd'))
+>>> f
+      0    1
+a  1.40  NaN
+b  7.10 -4.5
+c   NaN  NaN
+d  0.75 -1.3
+>>> f.sum(axis=1)
+a    1.40
+b    2.60
+c     NaN
+d   -0.55
+dtype: float64
+>>> f.sum(skipna=False,axis=1)
+a     NaN
+b    2.60
+c     NaN
+d   -0.55
+dtype: float64
+===================================================
+>>> f=pd.Series(np.random.randint(1,5,15))
+>>> f
+0     1
+1     3
+2     4
+3     1
+4     2
+5     3
+6     3
+7     3
+8     2
+9     3
+10    4
+11    4
+12    2
+13    1
+14    1
+dtype: int32
+>>> f.value_counts()
+3    5
+1    4
+4    3
+2    3
+>>> f.count()
+15
+>>> f.isin(range(2))
+0      True
+1     False
+2     False
+3      True
+4     False
+5     False
+6     False
+7     False
+8     False
+9     False
+10    False
+11    False
+12    False
+13     True
+14     True
+dtype: bool
+=======================================================
+>>> f=pd.DataFrame([range(9),range(4,13),np.random.randint(0,3,9)]).T
+>>> f
+   0   1  2
+0  0   4  0
+1  1   5  1
+2  2   6  2
+3  3   7  2
+4  4   8  0
+5  5   9  1
+6  6  10  1
+7  7  11  1
+8  8  12  0
+>>> f.apply(pd.value_counts)
+      0    1    2
+0   1.0  NaN  3.0
+1   1.0  NaN  4.0
+2   1.0  NaN  2.0
+3   1.0  NaN  NaN
+4   1.0  1.0  NaN
+5   1.0  1.0  NaN
+6   1.0  1.0  NaN
+7   1.0  1.0  NaN
+8   1.0  1.0  NaN
+9   NaN  1.0  NaN
+10  NaN  1.0  NaN
+11  NaN  1.0  NaN
+12  NaN  1.0  NaN
+=============================================================
+>>> d=pd.DataFrame([[1,6,3],[1,None,None],[None,None,None],[None,7,4]])
+>>> d
+     0    1    2
+0  1.0  6.0  3.0
+1  1.0  NaN  NaN
+2  NaN  NaN  NaN
+3  NaN  7.0  4.0
+>>> d.dropna()
+     0    1    2
+0  1.0  6.0  3.0
+>>> d.dropna(how='all')
+     0    1    2
+0  1.0  6.0  3.0
+1  1.0  NaN  NaN
+3  NaN  7.0  4.0
+>>> d.dropna(how='all',axis=1)
+     0    1    2
+0  1.0  6.0  3.0
+1  1.0  NaN  NaN
+2  NaN  NaN  NaN
+3  NaN  7.0  4.0
+>>> d.fillna({1:'p1',2:'p2',3:'p3'})
+     0   1   2
+0  1.0   6   3
+1  1.0  p1  p2
+2  NaN  p1  p2
+3  NaN   7   4
+====================================================================
+>>> d=pd.Series(np.random.randn(10),index=[list('aaabbbccdd'),[1,2,3,1,2,3,1,2,2,3]])
+>>> d
+a  1   -1.782792
+   2    0.606221
+   3   -0.727485
+b  1   -0.697286
+   2    0.120132
+   3   -0.229143
+c  1   -0.891454
+   2    2.176049
+d  2    2.322191
+   3    0.452857
+dtype: float64
+>>> d.b
+1   -0.697286
+2    0.120132
+3   -0.229143
+dtype: float64
+>>> d.ix[2]
+-0.72748495402130986
+>>> d.ix[:,2]
+a    0.606221
+b    0.120132
+c    2.176049
+d    2.322191
+dtype: float64
+>>> d.ix[:,3]
+a   -0.727485
+b   -0.229143
+d    0.452857
+dtype: float64
+>>> d.index.names=['zimu','shuzi']
+>>> d
+zimu  shuzi
+a     1       -1.782792
+      2        0.606221
+      3       -0.727485
+b     1       -0.697286
+      2        0.120132
+      3       -0.229143
+c     1       -0.891454
+      2        2.176049
+d     2        2.322191
+      3        0.452857
+dtype: float64
+>>> d.sum(level='shuzi')
+shuzi
+1   -3.371532
+2    5.224594
+3   -0.503771
+dtype: float64
+>>> d.sum(level='zimu')
+zimu
+a   -1.904055
+b   -0.806297
+c    1.284595
+d    2.775049
+dtype: float64
+==================================================================
+d=pd.read_table('jiu.csv',encoding='gb18030',names=['a','name','id']，nrows=8),sep=',')			#和下面一样
+d=pd.read_csv('jiu.csv',encoding='gb18030',names=['a','name','id']，nrows=8)        
+>>> d
+      a                                      name       id
+0    99          【限量疯抢】ROYALCANIN皇家 小型成犬粮PR27 2千克  1370159
+1   104             ROYALCANIN皇家 小型犬幼犬粮 MIJ31 2千克  1232003
+2   196                  ROYALCANIN皇家 A3优选幼犬粮 8千克  1232094
+3   173                  ROYALCANIN皇家 CC优选成犬粮 8千克  1232100
+4   190               ROYALCANIN皇家 贵宾成犬粮 PD30 3千克  1382478
+5   470              ROYALCANIN皇家 中型犬成犬粮 M25 15千克  1232050
+6   489            ROYALCANIN皇家 拉布拉多成犬粮 LR30 12千克  1370163
+7   181             ROYALCANIN皇家 大型犬幼犬粮 MAJ30 4千克  1370169
+==============================================================================
+s4 -0.387370 -0.040538 -0.112466
+>>> f.apply(func=lambda x:x.max()-x.min())
+b    1.058987
+d    0.861049
+e    1.214946
+dtype: float64
+>>> f.apply(func=lambda x:x.max()-x.min(),axis=1)
+s1    1.383117
+s2    1.264188
+s3    1.573203
+s4    0.346833
+dtype: float64
+=============================================================
+>>> d1=pd.DataFrame({'key':list('bbacaab'),'data1':range(7)})
+>>> d2=pd.DataFrame({'key':list('abd'),'data2':range(3)})
+>>> d1
+   data1 key
+0      0   b
+1      1   b
+2      2   a
+3      3   c
+4      4   a
+5      5   a
+6      6   b
+>>> d2
+   data2 key
+0      0   a
+1      1   b
+2      2   d
+>>> pd.merge(d1,d2,on='key')
+   data1 key  data2
+0      0   b      1
+1      1   b      1
+2      6   b      1
+3      2   a      0
+4      4   a      0
+5      5   a      0
+>>> pd.merge(d1,d2,how='outer')			#how默认是inner
+   data1 key  data2
+0    0.0   b    1.0
+1    1.0   b    1.0
+2    6.0   b    1.0
+3    2.0   a    0.0
+4    4.0   a    0.0
+5    5.0   a    0.0
+6    3.0   c    NaN
+7    NaN   d    2.0
+>>> d1=pd.DataFrame({'key1':list('bbacaab'),'data1':range(7)})
+>>> d2=pd.DataFrame({'key2':list('abd'),'data2':range(3)})
+>>> pd.merge(d1,d2,left_on='key1',right_on='key2')
+   data1 key1  data2 key2
+0      0    b      1    b
+1      1    b      1    b
+2      6    b      1    b
+3      2    a      0    a
+4      4    a      0    a
+5      5    a      0    a
+>>> d1=pd.DataFrame({'key':list('bbacaab'),'data':range(7)})
+>>> d2=pd.DataFrame({'key':list('abd'),'data':range(3)})
+>>> pd.merge(d1,d2,on='key',suffixes=['111','222'])
+   data111 key  data222
+0        0   b        1
+1        1   b        1
+2        6   b        1
+3        2   a        0
+4        4   a        0
+5        5   a        0
+=============================================================================
+>>> l=pd.DataFrame({'key1':['Ohio','Ohio','Ohio','Nevada','Nevada'],'key2':[2001,2000,2000,2001,2002],'data':np.arange(5)})
+>>> r=pd.DataFrame(np.arange(12).reshape((6,2)),index=[['Nevada','Nevada','Ohio','Ohio','Ohio','Ohio'],[2001,2000,2000,2000,2001,2002]],columns=['e1','e2'])
+>>> l
+   data    key1  key2
+0     0    Ohio  2001
+1     1    Ohio  2000
+2     2    Ohio  2000
+3     3  Nevada  2001
+4     4  Nevada  2002
+>>> r
+             e1  e2
+Nevada 2001   0   1
+       2000   2   3
+Ohio   2000   4   5
+       2000   6   7
+       2001   8   9
+       2002  10  11
+>>> pd.merge(l,r,left_on=['key1','key2'],right_index=True,how='outer')
+   data    key1  key2    e1    e2
+0   0.0    Ohio  2001   8.0   9.0
+1   1.0    Ohio  2000   4.0   5.0
+1   1.0    Ohio  2000   6.0   7.0
+2   2.0    Ohio  2000   4.0   5.0
+2   2.0    Ohio  2000   6.0   7.0
+3   3.0  Nevada  2001   0.0   1.0
+4   4.0  Nevada  2002   NaN   NaN
+4   NaN  Nevada  2000   2.0   3.0
+4   NaN    Ohio  2002  10.0  11.0
+====================================================================
+>>> l=pd.DataFrame(np.linspace(1,6,6).reshape((3,2)),index=list('ace'),columns=['Ohio','Nevada'])
+>>> r=pd.DataFrame(np.linspace(7,14,8).reshape((4,2)),index=list('bcde'),columns=['Miss','Ala'])
+>>> l
+   Ohio  Nevada
+a   1.0     2.0
+c   3.0     4.0
+e   5.0     6.0
+>>> r
+   Miss   Ala
+b   7.0   8.0
+c   9.0  10.0
+d  11.0  12.0
+e  13.0  14.0
+>>> l.join(r,how='outer')
+   Ohio  Nevada  Miss   Ala
+a   1.0     2.0   NaN   NaN
+b   NaN     NaN   7.0   8.0
+c   3.0     4.0   9.0  10.0
+d   NaN     NaN  11.0  12.0
+e   5.0     6.0  13.0  14.0
+>>> r1=pd.DataFrame(np.linspace(7,14,8).reshape((4,2)),index=list('bcde'),columns=['Miss','Ala'])
+>>> r2=pd.DataFrame(np.linspace(7,14,8).reshape((4,2)),index=list('bcde'),columns=['Miss22','Ala22'])
+>>> l.join([r1,r2],how='outer')
+   Ohio  Nevada  Miss   Ala  Miss22  Ala22
+a   1.0     2.0   NaN   NaN     NaN    NaN
+b   NaN     NaN   7.0   8.0     7.0    8.0
+c   3.0     4.0   9.0  10.0     9.0   10.0
+d   NaN     NaN  11.0  12.0    11.0   12.0
+e   5.0     6.0  13.0  14.0    13.0   14.0
+=========================================================================================
+>>> s1=pd.Series([0,1],index=['a','b'])
+>>> s2=pd.Series([2,3,4],index=['c','d','e'])
+>>> s3=pd.Series([5,6],index=['f','g'])
+>>> pd.concat([s1,s2,s3])
+a    0
+b    1
+c    2
+d    3
+e    4
+f    5
+g    6
+dtype: int64
+>>> pd.concat([s1,s2,s3],ignore_index=True)				#忽略索引
+0    0
+1    1
+2    2
+3    3
+4    4
+5    5
+6    6
+dtype: int64
+>>> pd.concat([s1,s2,s3],axis=1)
+     0    1    2
+a  0.0  NaN  NaN
+b  1.0  NaN  NaN
+c  NaN  2.0  NaN
+d  NaN  3.0  NaN
+e  NaN  4.0  NaN
+f  NaN  NaN  5.0
+g  NaN  NaN  6.0
+>>> pd.concat([s1,s2,s3],axis=1,join='inner')
+Empty DataFrame
+Columns: [0, 1, 2]
+Index: []
+>>> s4=pd.concat([s1*5,s3])
+>>> s4
+a    0
+b    5
+f    5
+g    6
+dtype: int64
+>>> pd.concat([s1,s4],axis=1,join_axes=[['a','c','b','g']])
+     0    1
+a  0.0  0.0
+c  NaN  NaN
+b  1.0  5.0
+g  NaN  6.0
+>>> z=pd.concat([s1,s1,s3],keys=['k1','k2','k3'])
+k1  a    0
+    b    1
+k2  a    0
+    b    1
+k3  f    5
+    g    6
+dtype: int64
+==========================================================================
+n=pd.DataFrame({'food':['bacon','pork','bacon','Pastrami','beef','Bacon','pastrami','ham','lox'],'ounces':[4,3,12,6,7.5,8,3,5,6]})
+m={'bacon':'pig','pork':'pig','pastrami':'cow','beef':'cow','ham':'pig','lox':'salmon'}
+>>> n['animal']=n.food.map(str.lower).map(m)						#map的参数是函数或者含有映射关系的字典型对象
+###也可以写成 n['animal']=n.food.map(lambda x:m[x.lower()])	
+>>> n
+       food  ounces  animal
+0     bacon     4.0     pig
+1      pork     3.0     pig
+2     bacon    12.0     pig
+3  Pastrami     6.0     cow
+4      beef     7.5     cow
+5     Bacon     8.0     pig
+6  pastrami     3.0     cow
+7       ham     5.0     pig
+8       lox     6.0  salmon
+========================================================
+>>> d1=pd.Series([1,-999,2,-999,3,-1000,4])					#两种替换方法
+>>> d1.replace([-999,-1000],[np.nan,'asd'])
+0      1
+1    NaN
+2      2
+3    NaN
+4      3
+5    asd
+6      4
+dtype: object
+>>> d1.replace({-999:np.nan,-1000:'asd'})
+0      1
+1    NaN
+2      2
+3    NaN
+4      3
+5    asd
+6      4
+dtype: object
+====================================================================================
+>>> d=pd.DataFrame(np.arange(12).reshape((3,4)),index=['Aa','Bb','Cc'],columns=['one','two','three','four'])				#index和columns改标签
+>>> d
+    one  two  three  four
+Aa    0    1      2     3
+Bb    4    5      6     7
+Cc    8    9     10    11
+>>> d.index.map(str.upper)
+Index(['AA', 'BB', 'CC'], dtype='object')
+>>> d.rename(columns=str.title,index={'Cc':'asdsad'})
+        One  Two  Three  Four
+Aa        0    1      2     3
+Bb        4    5      6     7
+asdsad    8    9     10    11
+>>> d
+    one  two  three  four
+Aa    0    1      2     3
+Bb    4    5      6     7
+Cc    8    9     10    11
+>>> d.rename(columns=str.title,index={'Cc':'asdsad'},inplace=True)				#就地修改index
+>>> d
+        One  Two  Three  Four
+Aa        0    1      2     3
+Bb        4    5      6     7
+asdsad    8    9     10    11
+================================================================================
+>>> array = [3, 60, 43, 100, 52, 36, 37, 0, 80, 1000] 				# 数组
+>>> bins = [0, 25, 50, 75, 100] 						# 切割成什么
+>>> cat = pd.cut(array, bins)
+>>> cat 							# cat是一个Categorical(类别型)类型
+[(0, 25], (50, 75], (25, 50], (75, 100], (50, 75], (25, 50], (25, 50], NaN, (75, 100], NaN]
+Categories (4, interval[int64]): [(0, 25] < (25, 50] < (50, 75] < (75, 100]]
+>>> cat.codes 							# 数组原来的元素数据第几个面元
+array([ 0,  2,  1,  3,  2,  1,  1, -1,  3, -1], dtype=int8)
+>>> pd.value_counts(cat)					 # 每个面元有多少个元素
+(25, 50]     3
+(75, 100]    2
+(50, 75]     2
+(0, 25]      1
+>>> array = [3, 60, 43, 100, 52, 36, 37, 0, 80, 1000]
+>>> c1=pd.cut(array,5)						#cut将根据值本身来选择箱子均匀间隔，qcut是根据这些值的频率来选择箱子的均匀间隔。 
+>>> c1
+[(-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (800.0, 1000.0]]
+Categories (5, interval[float64]): [(-1.0, 200.0] < (200.0, 400.0] < (400.0, 600.0] < (600.0, 800.0] <(800.0, 1000.0]]
+>>> c1.value_counts()
+(-1.0, 200.0]      9
+(200.0, 400.0]     0
+(400.0, 600.0]     0
+(600.0, 800.0]     0
+(800.0, 1000.0]    1
+dtype: int64
+>>> c2=pd.qcut(array,5)						#cut将根据值本身来选择箱子均匀间隔，qcut是根据这些值的频率来选择箱子的均匀间隔。 
+>>> c2.value_counts()
+(-0.001, 29.4]    2
+(29.4, 40.6]      2
+(40.6, 55.2]      2
+(55.2, 84.0]      2
+(84.0, 1000.0]    2
+dtype: int64
+=============================================================================
+>>> d=pd.DataFrame(np.random.randn(1000,4))
+>>> d.describe()
+                 0            1            2            3
+count  1000.000000  1000.000000  1000.000000  1000.000000
+mean      0.011737     0.018094    -0.028434     0.049472
+std       0.993377     1.026926     0.989607     1.012429
+min      -3.649328    -3.246692    -2.994882    -2.749253
+25%      -0.686286    -0.700331    -0.695320    -0.610690
+50%       0.036357     0.030330    -0.027339     0.067507
+75%       0.662793     0.699072     0.620866     0.736038
+max       3.299953     3.039770     3.258734     3.498223
+>>> d[(np.abs(d)>=3).any(1)]
+            0         1         2         3
+75  -0.014136 -3.071373  0.019762 -1.220275
+183  0.389718 -0.233315  2.176729  3.498223
+277  0.247349  3.039770  0.243524  1.284148
+342  0.756550 -0.862356  3.258734  0.596788
+478 -3.001721 -1.830291 -0.144029 -0.998189
+590  2.885968 -0.054898  3.136768 -0.589396
+659  3.299953  0.405561 -1.104163 -1.172640
+695 -3.649328  2.404056 -1.033741  0.016968
+770  1.134811 -3.246692  0.575013  0.620758
+996 -3.069098 -0.264819 -0.643567  0.503933
+========================================================================
+>>> d1
+0    0.097061
+1   -0.907976
+2    1.347151
+3    1.179011
+4   -0.553632
+5    0.257018
+dtype: float64
+>>> d2=np.random.choice(d1.index,size=11)
+>>> d2
+array([1, 0, 1, 5, 2, 1, 4, 3, 0, 0, 1], dtype=int64)
+>>> d1.take(d2)
+1   -0.907976
+0    0.097061
+1   -0.907976
+5    0.257018
+2    1.347151
+1   -0.907976
+4   -0.553632
+3    1.179011
+0    0.097061
+0    0.097061
+1   -0.907976
+dtype: float64
+=================================================================
+>>> d1
+1      2
+a    aaa
+z     33
+dtype: object
+>>> d1.map(lambda x:re.sub(r'\d+','hello',str(x)))
+1    hello
+a      aaa
+z    hello
+dtype: object
+-------------------------------------------------------------------------
+>>> d1									#pandas的re/正则
+1    a213dv2				
+a        aaa
+z         33
+dtype: object
+>>> z=d1.str.findall(r'\d+')
+>>> z
+1    [213, 2]
+a          []
+z         NaN
+dtype: object
+>>> z.str[0]
+1    213
+a    NaN
+z    NaN
+dtype: object
+>>> z.str[1]
+1      2
+a    NaN
+z    NaN
+dtype: object
+>>> z.str.get(1)
+1      2
+a    NaN
+z    NaN
+dtype: object
+>>> d1.map(lambda x:re.compile(r'\d+').findall(str(x)))			#对str化的的map能找到int
+1    [213, 2]
+a          []
+z        [33]
+dtype: object
+>>> d1.str.contains('2')				#contains
+1     True
+a    False
+z      NaN
+dtype: object
+==============================================
+>>> d
+    col1  col2 col3
+a    one     1   AA
+a    one     2   BB
+b    two     1   CC
+c    two     2   DD
+b    two     1   EE
+a  three     1   FF
+c   four     1   GG
+>>> d[~d.index.duplicated()]
+  col1  col2 col3
+a  one     1   AA
+b  two     1   CC
+c  two     2   DD
+>>> d.duplicated(['col1','col2'])
+a    False
+a    False
+b    False
+c    False
+b     True
+a    False
+c    False
+dtype: bool
+>>> d.drop_duplicates('col1')
+    col1  col2 col3
+a    one     1   AA
+b    two     1   CC
+a  three     1   FF
+c   four     1   GG
+>>> d.drop_duplicates('col2')
+  col1  col2 col3
+a  one     1   AA
+a  one     2   BB
+=============================================================
+DataFrame.plot()              	kind参数：line是线图,bar是柱状图，barh横向柱状图
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
