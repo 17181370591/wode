@@ -1,0 +1,65 @@
+import matplotlib.pyplot as plt
+hist：直方图，bins表示分成几块.用来表示数据分布情况
+bar：条形图。类似plot的坐标分布，显示为条形
+scatter：散点图
+plot：线图
+fill_between:填充颜色,color='red',where=y>100,
+stackplot(days, sleeping,eating,working,playing, colors=['m','c','r','k'])  ：后一个图的数据会加上前面的数据的和，生成层叠的图。days是横坐标
+plt.pie(slices,					#饼图，数据
+        labels=activities,					#每一块的标注
+        colors=cols,						#颜色
+        startangle=90,					#旋转角度
+        shadow= True,					
+        explode=(0,0.1,0,0),					#哪一块特别显示
+        autopct='%1.1f%%') 				  #显示百分比，并标明显示格式
+======================================================================================
+data_a=pd.read_csv('11.csv')
+cs=data_a['cs'].tolist()
+nan=data_a['nan'].tolist()
+nv=data_a['nv'].tolist()
+cs1=numpy.array([i.replace(' ' ,'') for i in cs]).tolist()
+w=0.4
+p.bar(cs1,nan,width=w,align='edge')
+p.bar(cs1,nv,width=-w,align='edge')
+#p.xticks(cs1)
+pp=dict(zip(cs1,list(range(31))))
+for a,b in zip(cs1,nan):
+    p.text(a,b*1.03,b)
+for a,b in zip(cs1,nv):
+    p.text(a,b*0.97,b,color='red')
+print(list(zip(cs1,nan)))
+p.grid(linestyle='dashed',color='y') 							#设置网格
+p.show()
+============================================================================================================
+a=np.linspace(0,5*pi,1000)
+a1=np.sin(a)
+a2=np.cos(a)
+p.plot(a,a1,label='%s')
+p.plot(a,a2)
+p.fill_between(a,a1,a2,color='r',where=a1<a2)
+p.show()
+=====================================================================================================
+import numpy as np   
+import matplotlib.pyplot as p  
+from  matplotlib import animation					
+ff=p.figure()
+ax=p.axes(xlim=(0,2),ylim=(-2,2))
+line,=ax.plot([],[],lw=2)
+def init():   
+    line.set_data([], [])   
+    return line,  
+def pic(i):
+    x=np.linspace(0,2,1000)
+    y=np.sin( 2*np.pi* (x +0.01* i))  
+    line.set_data(x,y)
+    return line,
+aaa=animation.FuncAnimation(ff,pic,frames=100,interval=1,blit=True)				#建一个对象。frame取大会平滑，乘以0.01正好=2pi是一个周期
+p.show()
+==============================================================================================================================================================================================
+在图类显示标签的方法：
+for a,b in zip(x,y):
+    plt.text(a, b+0.05, '%.0f' % b, ha='center', va= 'bottom',fontsize=7)
+
+  首先，前边设置的x、y值其实就代表了不同柱子在图形中的位置（坐标），通过for循环找到每一个x、y值的相应坐标——a、b，再使用plt.text在对应位置添文字说明来生成相应的数字标签，而for循环也保证了每一个柱子都有标签。
+       其中，a, b+0.05表示在每一柱子对应x值、y值上方0.05处标注文字说明， '%.0f' % b,代表标注的文字，即每个柱子对应的y值， ha='center', va= 'bottom'代表horizontalalignment（水平对齐）、verticalalignment（垂直对齐）的方式，fontsize则是文字大小。
+
