@@ -1,0 +1,37 @@
+import io  
+import sys   
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer,encoding='gb18030')
+解决无缘无故gbk编码错误
+===============================================================
+scrapy crawl jd  -o 1.csv(保存到1.csv)   --nolog(不打印log)
+response.text解码失败可以用response.body.decode()
+===============================================================
+def start_requests(self):
+    return [scrapy.FormRequest("http://www.example.com/login",
+                               formdata={'user': 'john', 'pass': 'secret'}]
+重写start_requests，用post打开start_urls
+===============================================================
+yield scrapy.http.FormRequest(self.myurl,formdata = {'pn': str(self.curpage), 'kd': self.kd},callback=self.parse)
+在parse里递归。yield不用返回列表
+===============================================================
+def start_requests(self):
+return [FormRequest(self.u,cookies=self.c,headers=self.h,callback=self.parse)]
+self.u=r'https://bbs.south-plus.net/thread_new.php?fid-5.html'
+self.h={'User-Agent':'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36 OPR/48.0.2685.52'}
+        self.c={'eb9e6_winduser':'BwQEBAlRbwJdBlJTBAYEBlEAD1JSBVkCVldcU1EEUFcOBwNVA1dRPA%3D%3D'}
+===============================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
