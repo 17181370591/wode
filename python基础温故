@@ -269,3 +269,45 @@ AttributeError: 'Student' object has no attribute 'score'
 >>> g.score = 9999
 
 ====================================================================
+
+多重继承
+
+我们要给动物再加上Runnable和Flyable的功能，只需要先定义好Runnable和Flyable的类：
+
+class Runnable(object):
+    def run(self):
+        print('Running...')
+
+class Flyable(object):
+    def fly(self):
+        print('Flying...')
+对于需要Runnable功能的动物，就多继承一个Runnable，例如Dog：
+
+class Dog(Mammal, Runnable):
+    pass
+对于需要Flyable功能的动物，就多继承一个Flyable，例如Bat：
+
+class Bat(Mammal, Flyable):
+    pass
+通过多重继承，一个子类就可以同时获得多个父类的所有功能。
+
+关于同名方法的继承顺序：
+
+class A(object):
+    def f(self):
+        print "A"
+
+class B(object):
+    def f(self):
+        print "B"
+
+class C(B,A):
+    pass
+c = C()
+c.f()#会输出什么?
+
+#"A" or "B"
+
+#结论:‘B’,输出什么的决定性因素是C在继承父类时的顺序，即靠近左边的先输出!
+
+====================================================================
