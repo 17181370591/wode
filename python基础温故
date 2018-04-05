@@ -1,0 +1,60 @@
+exec可以动态调用函数
+    def f(x):
+      print（x)
+    exec('for i in range(9):f(x)')
+    
+list和dict的copy:
+>>> import copy
+>>> origin = [1, 2, [3, 4]]
+#origin 里边有三个元素：1， 2，[3, 4]
+>>> cop1 = copy.copy(origin)
+>>> cop2 = copy.deepcopy(origin)
+>>> cop1 == cop2
+True
+>>> cop1 is cop2
+False 
+#cop1 和 cop2 看上去相同，但已不再是同一个object
+>>> origin[2][0] = "hey!" 
+>>> origin
+[1, 2, ['hey!', 4]]
+>>> cop1
+[1, 2, ['hey!', 4]]
+>>> cop2
+[1, 2, [3, 4]]
+#把origin内的子list [3, 4] 改掉了一个元素，观察 cop1 和 cop2
+
+list的append,extend，sort等函数都直接修改list，返回None
+复制list可以用d1=d[:]，直接用d2=d的话是直接引用d了
+
+字符串全部替换
+>>> tr=''.maketrans('ab','2笔')
+>>> 'asbadbj'.translate(tr)
+
+fromkeys可以用dict快速生成dict
+>>> d
+{1: 'a', 2: 'b', 3: [0, 'd', 'e'], 4: 44}
+>>> d.fromkeys(d)
+{1: None, 2: None, 3: None, 4: None}
+>>> d.fromkeys(d,'good')
+{1: 'good', 2: 'good', 3: 'good', 4: 'good'}
+
+zip：打包
+>>> dict(zip(range(3),'asd'))
+{0: 'a', 1: 's', 2: 'd'}
+filter：过滤，返回x%2！=0
+>>> list(filter(lambda x:x%2,range(9)))
+[1, 3, 5, 7]
+map：对迭代器每个值计算
+>>> list(map(lambda x:x%2,range(9)))
+[0, 1, 0, 1, 0, 1, 0, 1, 0]
+reduce：对每个值计算，最后得到一个值
+>>> reduce(lambda x,y:y+x,'huaq!')
+'!qauh'
+
+globals()是全局变量的dict
+>>> q=1
+>>> def f(q):
+	q='aa'
+	print(q,globals()['q'])
+>>> f(q)
+aa 1
