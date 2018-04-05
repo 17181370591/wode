@@ -88,3 +88,35 @@ Traceback (most recent call last):
 AssertionError
 
 ====================================================================
+
+>>> import fileinput
+>>> for i in open('1.txt').readlines():
+	i
+'123 456\n'
+'\n'
+'789  \n'
+'  俺是\n'
+'\n'
+'asdd\n'
+'a\n'
+'\t1\t\n'
+'6d\n'
+'a\n'
+'\t1\t\n'
+'6'
+>>> for i in fileinput.input('1.txt'):
+	i	
+'123 456\n'
+'\n'
+'789  \n'
+'  俺是\n'
+'\n'
+'asdd\n'
+'a\n'
+'\t1\t\n'
+'6d\n'
+'a\n'
+'\t1\t\n'
+'6'
+
+====================================================================
