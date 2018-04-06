@@ -1,0 +1,168 @@
+ 
+ import logging
+
+  logger = logging.getLogger(__name__)
+  logger.setLevel(level = logging.INFO)
+  
+   #设置logging信息的格式
+  fmt='%(levelname)s>>>%(asctime)s|||%(message)s'
+  formatter = logging.Formatter(fmt)
+
+   #创建一个FileHandler，并对输出消息的格式进行设置，将其添加到logger，然后将日志写入到指定的文件中
+  handler = logging.FileHandler("log.txt")
+  #handler.setLevel(logging.INFO)
+  handler.setFormatter(formatter)
+
+   #logger中添加StreamHandler，可以将日志输出到屏幕上
+  console = logging.StreamHandler()
+  #console.setLevel(logging.INFO)
+
+   #添加到logger
+  logger.addHandler(handler)
+  logger.addHandler(console)
+
+  logger.info("Start print log")
+  logger.debug("Do something")
+  logger.warning("Something maybe fail.")
+  try:
+      open("sklearn.txt","rb")
+  except (SystemExit,KeyboardInterrupt):
+      raise
+  except Exception:
+      logger.error("Faild to open sklearn.txt from logger.error",exc_info = True)
+      #也可以使用logger.exception(msg,_args)，它等价于logger.error(msg,exc_info = True,_args)
+  logger.info("Finish")
+
+===================================================================================
+
+  #fmt的内容：
+%(levelno)s：打印日志级别的数值
+%(levelname)s：打印日志级别的名称
+%(pathname)s：打印当前执行程序的路径，其实就是sys.argv[0]
+%(filename)s：打印当前执行程序名
+%(funcName)s：打印日志的当前函数
+%(lineno)d：打印日志的当前行号
+%(asctime)s：打印日志的时间
+%(thread)d：打印线程ID
+%(threadName)s：打印线程名称
+%(process)d：打印进程ID
+%(message)s：打印日志信息
+
+  #各种handler，console打印使用StreamHandler，保存日志到文件使用FileHandler
+StreamHandler：logging.StreamHandler；日志输出到流，可以是sys.stderr，sys.stdout或者文件
+FileHandler：logging.FileHandler；日志输出到文件
+BaseRotatingHandler：logging.handlers.BaseRotatingHandler；基本的日志回滚方式
+RotatingHandler：logging.handlers.RotatingHandler；日志回滚方式，支持日志文件最大数量和日志文件回滚
+TimeRotatingHandler：logging.handlers.TimeRotatingHandler；日志回滚方式，在一定时间区域内回滚日志文件
+SocketHandler：logging.handlers.SocketHandler；远程输出日志到TCP/IP sockets
+DatagramHandler：logging.handlers.DatagramHandler；远程输出日志到UDP sockets
+SMTPHandler：logging.handlers.SMTPHandler；远程输出日志到邮件地址
+SysLogHandler：logging.handlers.SysLogHandler；日志输出到syslog
+NTEventLogHandler：logging.handlers.NTEventLogHandler；远程输出日志到Windows NT/2000/XP的事件日志
+MemoryHandler：logging.handlers.MemoryHandler；日志输出到内存中的指定buffer
+HTTPHandler：logging.handlers.HTTPHandler；通过"GET"或者"POST"远程输出到HTTP服务器
+
+ #消息等级：
+FATAL：致命错误
+CRITICAL：特别糟糕的事情，如内存耗尽、磁盘空间为空，一般很少使用
+ERROR：发生错误时，如IO操作失败或者连接问题
+WARNING：发生很重要的事件，但是并不是错误时，如用户登录密码错误
+INFO：处理请求或者状态变化等日常事务
+DEBUG：调试过程中使用DEBUG等级，如算法中每个循环的中间状态
+
+===================================================================================
+
+<h3>多模块使用logging</h3>
+主模块mainModule.py
+
+import logging
+import  subModule
+logger = logging.getLogger("mainModule")
+logger.setLevel(level = logging.INFO)
+handler = logging.FileHandler("log.txt")
+handler.setLevel(logging.INFO)
+formatter = logging.Formatter('%(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+
+console = logging.StreamHandler()
+ #这里设置了debug也没用
+console.setLevel(logging.DEBUG)
+console.setFormatter(formatter)
+
+logger.addHandler(handler)
+logger.addHandler(console)
+
+logger.info("creating an instance of subModule.subModuleClass")
+a = subModule.SubModuleClass()
+logger.info("calling subModule.subModuleClass.doSomething")
+a.doSomething()
+logger.info("done with  subModule.subModuleClass.doSomething")
+logger.info("calling subModule.some_function")
+subModule.som_function()
+logger.info("done with subModule.some_function")
+
+子模块subModule.py
+
+import logging
+
+module_logger = logging.getLogger("mainModule.sub")
+class SubModuleClass(object):
+    def __init__(self):
+        self.logger = logging.getLogger("mainModule.sub.module")
+        self.logger.info("creating an instance in SubModuleClass")
+    def doSomething(self):
+        self.logger.info("do something in SubModule")
+        a = []
+        a.append(1)
+        self.logger.debug("list a = " + str(a))
+        self.logger.info("finish something in SubModuleClass")
+
+def som_function():
+    module_logger.info("call function some_function")
+
+===================================================================================
+
+多模块使用logging另一个例子
+
+a.py-------------
+import logging,b
+
+l=logging.getLogger('huaq')
+fmt='%(name)s>>>%(levelname)s:%(message)s'
+fmt=logging.Formatter(fmt)
+l.setLevel(logging.INFO)
+
+
+p=logging.FileHandler('log.txt')
+p.setFormatter(fmt)
+
+s=logging.StreamHandler()
+s.setFormatter(fmt)
+
+l.addHandler(p)
+l.addHandler(s)
+
+q=b.Q()
+q.dos(4)
+b.f(b.l1)
+c=logging.getLogger('huaq.q3')
+b.f(c)
+
+b.py-------------
+import logging
+
+l1=logging.getLogger('huaq.q1')
+
+class Q(object):
+    def __init__(self):
+        self.l2=logging.getLogger('huaq.q2')
+        self.l2.info('i am huaq2!2!')
+    def dos(self,m):
+        for i in range(m):
+            self.l2.info(i**2)
+
+def f(l):
+    l.info('fuck u{}'.format(l))
+
+===================================================================================
+
