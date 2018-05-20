@@ -6,6 +6,13 @@ print (chardet.detect(TestData))
     
 ====================================================================
 
+打开文件，相当于双击，比os.system要好
+>>> import win32api（需要安装py32win）
+>>> b=r'C:\Users\Administrator\Desktop\张涛团队采购项目（刘珪）.xlsx'
+>>> win32api.ShellExecute(0, 'open', b, '','',1)
+
+====================================================================
+
 汉字被转成%开头的是url编码
 >>> urllib.parse.unquote('%E4%BA%BA%E7%B1%BB')
 '人类'
