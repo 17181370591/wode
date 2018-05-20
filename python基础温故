@@ -6,6 +6,19 @@ print (chardet.detect(TestData))
     
 ====================================================================
 
+*args, **kw的用法
+
+	def person(name, age,*args, **kw):
+	    if 'city' in kw:
+		print(len(args),end='       ')
+	    print('name:', name, 'args:',args, 'keyword:', kw)
+	person('u',222,12,34,city=33,job='bb',sp=1)
+	person('u',222,*(12,34),**{'city':33,'job':'bb','sp':1})
+	=》2       name: u args: (12, 34) keyword: {'city': 33, 'job': 'bb', 'sp': 1}
+	=》2       name: u args: (12, 34) keyword: {'city': 33, 'job': 'bb', 'sp': 1}
+
+====================================================================
+
 exec可以动态调用函数
     def f(x):
       print（x)
