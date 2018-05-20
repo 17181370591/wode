@@ -1,3 +1,11 @@
+chardet库可以检测页面的编码，也可以查看页面源码的charset
+import collections,time,chardet,requests
+TestData = requests.get('http://www.baidu.com/').content
+print (chardet.detect(TestData))
+=》{'encoding': 'utf-8', 'confidence': 0.99, 'language': ''}
+    
+====================================================================
+
 exec可以动态调用函数
     def f(x):
       print（x)
