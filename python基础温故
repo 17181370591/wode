@@ -6,6 +6,14 @@ print (chardet.detect(TestData))
     
 ====================================================================
 
+汉字被转成%开头的是url编码
+>>> urllib.parse.unquote('%E4%BA%BA%E7%B1%BB')
+'人类'
+>>> urllib.parse.quote('人')
+'%E4%BA%BA'
+
+====================================================================
+
 *args, **kw的用法
 
 	def person(name, age,*args, **kw):
