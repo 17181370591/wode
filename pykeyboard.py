@@ -22,7 +22,7 @@ k.press_key(k.space_key) #模拟键盘按 空格键
 k.release_key(k.space_key) #模拟键盘松开空格键 
 time.sleep(1)
 
-#tap_key是点击的意思，相当于press+release，但是除了键还必须要一个参数，
+#tap_key是点击的意思，相当于press+release，但是除了键还必须要至少一个参数，
 #可以是n，表示次数，可以是interval，表示间隔时间
 k.tap_key('l',n=5,interval=.3)   
 k.tap_key(k.backspace_key,interval=1.3)
