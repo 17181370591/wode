@@ -92,3 +92,9 @@ profile.set_preference('network.proxy.http_port', 8080)  # int
 profile.update_preferences()
 dr = webdriver.Firefox(firefox_profile=profile)
 dr.get('http://httpbin.org/get')
+
+
+#删除，添加，获取cookie
+dr.delete_all_cookies()
+dr.add_cookie({'name':'ABC','value':'DEF'})
+dr.get_cookies()
