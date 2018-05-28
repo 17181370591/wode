@@ -1,6 +1,13 @@
 from selenium import webdriver
 import json
 
+#可以正常登录，打开其他网页自动处理cookie
+'''
+预先保存登录好的cookie的方法是：
+with open('2.json','w') as f:
+    f.write(json.dumps(dr.get_cookies()))
+'''
+
 dr = webdriver.Firefox()
 u1='https://tieba.baidu.com/'
 u="http://www.baidu.com"
