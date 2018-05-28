@@ -1,3 +1,10 @@
+requests使用代理   
+proxies = { "http": "http://10.10.1.10:3128", "https": "http://10.10.1.10:1080", }   
+requests.get("http://example.org", proxies=proxies)  
+
+    
+====================================================================
+
 chardet库可以检测页面的编码，也可以查看页面源码的charset
 import collections,time,chardet,requests
 TestData = requests.get('http://www.baidu.com/').content
