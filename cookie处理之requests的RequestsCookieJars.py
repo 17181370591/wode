@@ -1,5 +1,6 @@
 import requests,json
 
+#requests简单版有另一种方法，估计也能登录百度，但没有测试
 #登录首页成功，但切换页面现实未登录，估计登录失败。
 #推测原因是requests的cookie对象默认过期时间是expires，
 #而百度是expiry，但不知道怎么修改
