@@ -15,6 +15,7 @@ u="http://www.baidu.com"
 dr.get(u)
 dr.delete_all_cookies()
       
+#add_cookie里传入的键可以自己测试，新浪邮箱登录时domain是必须的（name和value所有地方都必须）
 with open('2.json') as f:
     f=f.read()
     j=json.loads(f)
