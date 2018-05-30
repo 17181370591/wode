@@ -98,3 +98,12 @@ dr.get('http://httpbin.org/get')
 dr.delete_all_cookies()
 dr.add_cookie({'name':'ABC','value':'DEF'})
 dr.get_cookies()
+
+
+#最大化窗口
+dr.maximize_window()
+#设置窗口宽，高
+dr.set_window_size(width,height)
+#设置窗口位置
+dr.set_window_position(x,y)
+ 
