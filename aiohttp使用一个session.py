@@ -1,6 +1,9 @@
 import asyncio,time,aiohttp,requests
 from lxml import etree
-            
+   
+#f和m一同完成一个任务，m用来生成一个session，传给f，这样可以使用一个session异步完成f
+#fetch和main同样
+
 async def f(se,i):     #虎扑湿乎乎帖子列表获取帖子地址
     async with se.get(url.format(i)) as r:
         s=await r.text()
