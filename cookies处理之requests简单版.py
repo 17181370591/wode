@@ -20,7 +20,9 @@ u='http://mail.sina.com.cn/'
 d={}
 for i in j:
     d[i['name']]=i['value']
-
-r=se.get(u,cookies=d)
+    
+#下面两行合并写成r=se.get(u,cookies=d)会失败！！
+se.cookies.update(d)    
+r=se.get(u)
 
 print('17181' in r.content.decode())
