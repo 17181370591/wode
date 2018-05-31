@@ -1,10 +1,5 @@
 '''
-Python-Image 基本的图像处理操作
-Python-Image 基本的图像处理操作，有需要的朋友可以参考下。
-
-Python 里面最常用的图像操作库是
-
- 
+Python-Image 基本的图像处理操作 
 
 Image library（PIL），功能上，虽然还不能跟Matlab比较，但是还是比较强大的，废话补多少，写点记录笔记。
 
@@ -90,36 +85,39 @@ im.getpixel((4,4))
 img.putpixel((4,4),(255,0,0))
 '''
 
+===================================================================================
+
 import random,string,time,win32api,win32con
 from PIL import Image,ImageDraw,ImageFont,ImageFilter
+
 S=string.digits+string.ascii_uppercase+string.digits+string.ascii_uppercase
-def r1(a,b):
+
+def r1(a,b):     #返回rgb值在a到b之间的3维元组
     return (random.randint(a,b),random.randint(a,b),random.randint(a,b))
-def r2():
+ 
+def r2():         #返回随机大小写字母或数字
     return random.choice(S)
 
 l=60
-s=(l*4,l)
-im=Image.new('RGB',s,(255,255,255))
-font=ImageFont.truetype('C:\python\simhei.ttf',60)
+s=(l*4,l)        #尺寸
+im=Image.new('RGB',s,(255,255,255))       #背景白色的rgb的60*60的图
+font=ImageFont.truetype('C:\python\simhei.ttf',60)    #使用的font
 
 
-for i in range(4):
-    im1=Image.new('RGB',(l,l))
-    draw=ImageDraw.Draw(im1)
-    draw.text((11,0),r2(),font=font,fill=r1(155,255))
-    im1=im1.rotate(random.randint(-20,20))
-    im.paste(im1,(l*i,0))
+for i in range(4):               
+    im1=Image.new('RGB',(l,l))        #画四个字符
+    draw=ImageDraw.Draw(im1)           
+    draw.text((11,0),r2(),font=font,fill=r1(155,255))      #画字符
+    im1=im1.rotate(random.randint(-20,20))        #加倾斜
+    im.paste(im1,(l*i,0))            #粘贴
 
 
 for i in range(s[0]):
     for j in range(s[1]):
-        c=im.getpixel((i,j))
+        c=im.getpixel((i,j))        #取每一点的rgb值，如果是纯黑色，则替换成随机颜色
         if c==(0,0,0):
             im.putpixel((i,j),r1(100,200))
-im=im.filter(ImageFilter.SMOOTH)
+im=im.filter(ImageFilter.SMOOTH)    #模糊处理
 
 im.show()
-
-
-im.__exit__()
+im.close()
