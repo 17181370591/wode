@@ -4,7 +4,9 @@ bar：条形图。类似plot的坐标分布，显示为条形
 scatter：散点图
 plot：线图
 fill_between:填充颜色,color='red',where=y>100,
-stackplot(days, sleeping,eating,working,playing, colors=['m','c','r','k'])  ：后一个图的数据会加上前面的数据的和，生成层叠的图。days是横坐标
+stackplot(days, sleeping,eating,working,playing, colors=['m','c','r','k'])  
+#后一个图的数据会加上前面的数据的和，生成层叠的图。days是横坐标
+
 plt.pie(slices,					#饼图，数据
         labels=activities,					#每一块的标注
         colors=cols,						#颜色
@@ -53,13 +55,18 @@ def pic(i):
     y=np.sin( 2*np.pi* (x +0.01* i))  
     line.set_data(x,y)
     return line,
-aaa=animation.FuncAnimation(ff,pic,frames=100,interval=1,blit=True)				#建一个对象。frame取大会平滑，乘以0.01正好=2pi是一个周期
+aaa=animation.FuncAnimation(ff,pic,frames=100,interval=1,blit=True)				
+#建一个对象。frame取大会平滑，乘以0.01正好=2pi是一个周期
+
 p.show()
 ==============================================================================================================================================================================================
 在图类显示标签的方法：
 for a,b in zip(x,y):
     plt.text(a, b+0.05, '%.0f' % b, ha='center', va= 'bottom',fontsize=7)
 
-  首先，前边设置的x、y值其实就代表了不同柱子在图形中的位置（坐标），通过for循环找到每一个x、y值的相应坐标——a、b，再使用plt.text在对应位置添文字说明来生成相应的数字标签，而for循环也保证了每一个柱子都有标签。
-       其中，a, b+0.05表示在每一柱子对应x值、y值上方0.05处标注文字说明， '%.0f' % b,代表标注的文字，即每个柱子对应的y值， ha='center', va= 'bottom'代表horizontalalignment（水平对齐）、verticalalignment（垂直对齐）的方式，fontsize则是文字大小。
+  首先，前边设置的x、y值其实就代表了不同柱子在图形中的位置（坐标），通过for循环找到每一个x、y值的相应坐标——a、b，
+  再使用plt.text在对应位置添文字说明来生成相应的数字标签，而for循环也保证了每一个柱子都有标签。
+       其中，a, b+0.05表示在每一柱子对应x值、y值上方0.05处标注文字说明， '%.0f' % b,代表标注的文字，
+       即每个柱子对应的y值， ha='center', va= 'bottom'代表horizontalalignment（水平对齐）、
+       verticalalignment（垂直对齐）的方式，fontsize则是文字大小。
 
