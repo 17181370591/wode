@@ -20,9 +20,12 @@ ch02-2
 unames=['user_id','gender','age','occupation','zip']
 rnames=['user_id','movie_id','rating','timestamp']
 mnames=['movie_id','title','genres']
-users=pd.read_table(r'C:\Users\Administrator\Desktop\pydata-book-master\ch02\movielens\users.dat',names=unames,sep='::',engine='python')
-ratings=pd.read_table(r'C:\Users\Administrator\Desktop\pydata-book-master\ch02\movielens\ratings.dat',names=rnames,sep='::',engine='python')
-movies=pd.read_table(r'C:\Users\Administrator\Desktop\pydata-book-master\ch02\movielens\movies.dat',names=mnames,sep='::',engine='python')
+users=pd.read_table(r'C:\Users\Administrator\Desktop\pydata-book-master\ch02\movielens\users.dat',
+names=unames,sep='::',engine='python')
+ratings=pd.read_table(r'C:\Users\Administrator\Desktop\pydata-book-master\ch02\movielens\ratings.dat',
+names=rnames,sep='::',engine='python')
+movies=pd.read_table(r'C:\Users\Administrator\Desktop\pydata-book-master\ch02\movielens\movies.dat',
+names=mnames,sep='::',engine='python')
 data=pd.merge(pd.merge(users,ratings),movies)           #3表合一
 mean_ratings=data.pivot_table(index='title',columns='gender',values='rating',aggfunc=np.mean)
     #数据透析表，aggfunc必须，np.mean表示重复项取平均值，pivot不能重复项
@@ -73,7 +76,8 @@ Name: Ohio, dtype: float64
 2000  NaN  1.5
 2001  2.4  1.7
 >>> type(f1)
-<class 'pandas.core.frame.DataFrame'>		#用series合成dataframe时，如果没有显性的制定index，series的index会变成dataframe的index
+<class 'pandas.core.frame.DataFrame'>		
+#用series合成dataframe时，如果没有显性的制定index，series的index会变成dataframe的index
 =====================================================================
 可以往dataframe填充的数据：
 2维ndarray
@@ -228,7 +232,8 @@ s2 -1  0  1
 s3 -1  0  1
 s4 -1  0  1
 ===================================================
->>> f=pd.DataFrame((np.random.rand(12)*2-1).reshape((4,3)),columns=list('bde'),index=('s1','s2','s3','s4'))		#其他方法忘了
+>>> f=pd.DataFrame((np.random.rand(12)*2-1).reshape((4,3)),columns=list('bde'),index=('s1','s2','s3','s4'))		
+#其他方法忘了
 >>> f
            b         d         e
 s1  0.043985 -0.681200  0.701917
@@ -479,7 +484,9 @@ c    1.284595
 d    2.775049
 dtype: float64
 ==================================================================
-d=pd.read_table('jiu.csv',encoding='gb18030',names=['a','name','id']，nrows=8),sep=',')			#和下面一样
+#和下面一样
+d=pd.read_table('jiu.csv',encoding='gb18030',names=['a','name','id']，nrows=8),sep=',')			
+
 d=pd.read_csv('jiu.csv',encoding='gb18030',names=['a','name','id']，nrows=8)        
 >>> d
       a                                      name       id
@@ -560,8 +567,10 @@ dtype: float64
 4        4   a        0
 5        5   a        0
 =============================================================================
->>> l=pd.DataFrame({'key1':['Ohio','Ohio','Ohio','Nevada','Nevada'],'key2':[2001,2000,2000,2001,2002],'data':np.arange(5)})
->>> r=pd.DataFrame(np.arange(12).reshape((6,2)),index=[['Nevada','Nevada','Ohio','Ohio','Ohio','Ohio'],[2001,2000,2000,2000,2001,2002]],columns=['e1','e2'])
+>>> l=pd.DataFrame({'key1':['Ohio','Ohio','Ohio','Nevada','Nevada'],
+			'key2':[2001,2000,2000,2001,2002],'data':np.arange(5)})
+>>> r=pd.DataFrame(np.arange(12).reshape((6,2)),index=[['Nevada','Nevada','Ohio','Ohio','Ohio','Ohio'],
+			[2001,2000,2000,2000,2001,2002]],columns=['e1','e2'])
 >>> l
    data    key1  key2
 0     0    Ohio  2001
@@ -675,9 +684,11 @@ k3  f    5
     g    6
 dtype: int64
 ==========================================================================
-n=pd.DataFrame({'food':['bacon','pork','bacon','Pastrami','beef','Bacon','pastrami','ham','lox'],'ounces':[4,3,12,6,7.5,8,3,5,6]})
+n=pd.DataFrame({'food':['bacon','pork','bacon','Pastrami','beef','Bacon','pastrami','ham','lox'],
+				'ounces':[4,3,12,6,7.5,8,3,5,6]})
 m={'bacon':'pig','pork':'pig','pastrami':'cow','beef':'cow','ham':'pig','lox':'salmon'}
->>> n['animal']=n.food.map(str.lower).map(m)						#map的参数是函数或者含有映射关系的字典型对象
+#map的参数是函数或者含有映射关系的字典型对象
+>>> n['animal']=n.food.map(str.lower).map(m)						
 ###也可以写成 n['animal']=n.food.map(lambda x:m[x.lower()])	
 >>> n
        food  ounces  animal
@@ -750,9 +761,11 @@ array([ 0,  2,  1,  3,  2,  1,  1, -1,  3, -1], dtype=int8)
 (50, 75]     2
 (0, 25]      1
 >>> array = [3, 60, 43, 100, 52, 36, 37, 0, 80, 1000]
->>> c1=pd.cut(array,5)						#cut将根据值本身来选择箱子均匀间隔，qcut是根据这些值的频率来选择箱子的均匀间隔。 
+>>> c1=pd.cut(array,5)						
+#cut将根据值本身来选择箱子均匀间隔，qcut是根据这些值的频率来选择箱子的均匀间隔。 
 >>> c1
-[(-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (800.0, 1000.0]]
+[(-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0],
+			(-1.0, 200.0], (-1.0, 200.0], (-1.0, 200.0], (800.0, 1000.0]]
 Categories (5, interval[float64]): [(-1.0, 200.0] < (200.0, 400.0] < (400.0, 600.0] < (600.0, 800.0] <(800.0, 1000.0]]
 >>> c1.value_counts()
 (-1.0, 200.0]      9
@@ -761,7 +774,8 @@ Categories (5, interval[float64]): [(-1.0, 200.0] < (200.0, 400.0] < (400.0, 600
 (600.0, 800.0]     0
 (800.0, 1000.0]    1
 dtype: int64
->>> c2=pd.qcut(array,5)						#cut将根据值本身来选择箱子均匀间隔，qcut是根据这些值的频率来选择箱子的均匀间隔。 
+>>> c2=pd.qcut(array,5)						
+#cut将根据值本身来选择箱子均匀间隔，qcut是根据这些值的频率来选择箱子的均匀间隔。 
 >>> c2.value_counts()
 (-0.001, 29.4]    2
 (29.4, 40.6]      2
@@ -902,56 +916,4 @@ a  one     1   AA
 a  one     2   BB
 =============================================================
 DataFrame.plot()              	kind参数：line是线图,bar是柱状图，barh横向柱状图
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
