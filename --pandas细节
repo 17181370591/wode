@@ -26,3 +26,37 @@ obj = Series([7,-5,7,4,2,0,4])
 print np.argsort(obj)
  #打印结果为：1,5,4,3,6,0,2 
 =================================================================================
+
+>>> q
+    a  b  c
+s1  0  1  2
+s2  3  4  5
+
+>>> q.stack()
+s1  a    0
+    b    1
+    c    2
+s2  a    3
+    b    4
+    c    5
+dtype: int32
+
+>>> q.stack().index
+MultiIndex(levels=[['s1', 's2'], ['a', 'b', 'c']],
+           labels=[[0, 0, 0, 1, 1, 1], [0, 1, 2, 0, 1, 2]])
+
+>>> q.unstack()
+a  s1    0
+   s2    3
+b  s1    1
+   s2    4
+c  s1    2
+   s2    5
+dtype: int32
+
+>>> q.unstack().index
+MultiIndex(levels=[['a', 'b', 'c'], ['s1', 's2']],
+           labels=[[0, 0, 1, 1, 2, 2], [0, 1, 0, 1, 0, 1]])
+           
+stack将columns转为index，unstack将index转成columns并作为index，相当于转置后stack，
+即q.T.stack()==q.unstack()   ，   q.T.unstack()==q.stack()
