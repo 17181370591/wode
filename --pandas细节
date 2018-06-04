@@ -110,6 +110,7 @@ a0
 003       93      2.0       80      3.0
 
 #取原数据q的学生名字，这里为了不重复取用了    ：2    ，这种方法肯定不好
+更好的写法是p3.drop_duplicates('a4','first',inplace=True)进行原地删除重复项
 >>> p3=q.loc[:2,['a0','a4']]
 #重命名列的title，用了另一种方法
 >>> p3.rename(columns={'a4':'userName'},inplace=True)
@@ -120,6 +121,7 @@ a0
 2  003       王五
 
 #按学生编号连接姓名和成绩
+#这里写p2.join(p3)更好，因为merge相当于对匹配项进行笛卡尔乘积，join直接按index进行匹配，类似vlookup
 >>> p4=p2.merge(p3,left_index=True,right_on='a0')
 #交换列
 >>> p4.insert(0,'userNum',p4.pop('a0'))
