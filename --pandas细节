@@ -121,7 +121,8 @@ a0
 2  003       王五
 
 #按学生编号连接姓名和成绩
-#这里写p2.join(p3)更好，因为merge相当于对匹配项进行笛卡尔乘积，join直接按index进行匹配，类似vlookup
+#这里写p3.set_index('a0',inplace=True)修改列a0做p3的index，
+#然后p2.join(p3)更好，因为merge相当于对匹配项进行笛卡尔乘积，join直接按index进行匹配，类似vlookup
 >>> p4=p2.merge(p3,left_index=True,right_on='a0')
 #交换列
 >>> p4.insert(0,'userNum',p4.pop('a0'))
