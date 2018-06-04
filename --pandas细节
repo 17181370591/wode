@@ -25,6 +25,7 @@ obj = Series([7,-5,7,4,2,0,4])
 #而numpy中的argsort函数比较奇怪，返回的是把数据进行排序之后，按照值得顺序对应的下标，下标从0开始
 print np.argsort(obj)
  #打印结果为：1,5,4,3,6,0,2 
+ 
 =================================================================================
 
 >>> q
@@ -60,3 +61,79 @@ MultiIndex(levels=[['a', 'b', 'c'], ['s1', 's2']],
            
 stack将columns转为index，unstack将index转成columns并作为index，相当于转置后stack，
 即q.T.stack()==q.unstack()   ，   q.T.unstack()==q.stack()
+
+=================================================================================
+
+将q转换成p，p和q的数据如下：
+>>> q
+    a0  a1  a2  a3  a4
+0  001  90  01  语文  张三
+1  002  96  01  语文  李四
+2  003  93  01  语文  王五
+3  001  87  02  数学  张三
+4  002  82  02  数学  李四
+5  003  80  02  数学  王五
+>>>p
+  userNum userName  score_01  rank_01  score_02  rank_02
+0   001       张三      90        3        87        1
+1   002       李四      96        1        82        2
+2   003       王五      93        2        80        3
+
+步骤如下：
+#第一步创建透析表，将a0做index，a2做columns，值取a1
+>>> p1=q.pivot(index='a0',columns='a2',values='a1')
+>>> p1
+a2   01  02
+a0         
+001  90  87
+002  96  82
+003  93  80
+
+#第二部将p1和p1的排序连接起来
+>>> p2=pd.concat([p1,p1.rank(ascending=0)],axis=1)
+#修改columns的title（？）
+>>> p2.columns=['score_01','score_02','rank_01','rank_02']
+#删除index的name
+>>> p2.index.name=None
+>>> p2
+    score_01 score_02  rank_01  rank_02
+001       90       87      3.0      1.0
+002       96       82      1.0      2.0
+003       93       80      2.0      3.0
+
+#第三部，删除原来'rank_01'的列，将它插入成第1列，目的是交换列
+>>> p2.insert(1,'rank_01',p2.pop('rank_01'))
+>>> p2
+    score_01  rank_01 score_02  rank_02
+001       90      3.0       87      1.0
+002       96      1.0       82      2.0
+003       93      2.0       80      3.0
+
+#取原数据q的学生名字，这里为了不重复取用了    ：2    ，这种方法肯定不好
+>>> p3=q.loc[:2,['a0','a4']]
+#重命名列的title，用了另一种方法
+>>> p3.rename(columns={'a4':'userName'},inplace=True)
+>>> p3
+    a0 userName
+0  001       张三
+1  002       李四
+2  003       王五
+
+#按学生编号连接姓名和成绩
+>>> p4=p2.merge(p3,left_index=True,right_on='a0')
+#交换列
+>>> p4.insert(0,'userNum',p4.pop('a0'))
+#将名次的数据类型从float转int
+>>> p4.iloc[:,[2,4]]=p4.iloc[:,[2,4]].applymap(int)
+>>> p4
+  userNum score_01  rank_01 score_02  rank_02 userName
+0     001       90        3       87        1       张三
+1     002       96        1       82        2       李四
+2     003       93        2       80        3       王五
+
+=================================================================================
+
+
+
+
+
