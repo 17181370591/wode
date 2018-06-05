@@ -1,3 +1,9 @@
+查看库的安装位置
+>>> import matplotlib
+>>> matplotlib.__file__
+
+====================================================================
+
 requests使用代理   
 proxies = { "http": "http://10.10.1.10:3128", "https": "http://10.10.1.10:1080", }   
 requests.get("http://example.org", proxies=proxies)  
