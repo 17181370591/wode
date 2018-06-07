@@ -28,6 +28,7 @@ def get1(s):
 ffu=fu.UserAgent()
 se=requests.session()
 #re1=re.compile(r'window.v="([_1-9A-Za-z]+)";',re.S)
+#上面应该写0-9
 re1=re.compile(r'window.v="(.*?)";',re.S)
 
 u='''http://openlaw.cn/search/judgement/default?type=&typeValue=&courtId=&lawFirmId=&lawyerId=&docTy
