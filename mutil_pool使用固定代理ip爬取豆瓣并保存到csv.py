@@ -1,3 +1,4 @@
+
 import requests,re,fake_useragent,pandas as pd,time
 from lxml import etree
 import execjs
@@ -35,10 +36,8 @@ def f(x,a=a):
             break
         i+=10
         print('已经收集',len(a))
-        
-
-
-
+      
+    
 if __name__=='__main__':
     try:
         man = Manager()
