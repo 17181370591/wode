@@ -29,11 +29,11 @@ ffu=fu.UserAgent()
 se=requests.session()
 #re1=re.compile(r'window.v="([_1-9A-Za-z]+)";',re.S)
 re1=re.compile(r'window.v="(.*?)";',re.S)
-u='http://openlaw.cn/search/judgement/default?typ\
-e=&typeValue=&courtId=&lawFirmId=&lawyerId=&docTy\
-pe=&causeId=&judgeDateYear=&lawSearch=&litigationTy\
-pe=&judgeId=&procedureType=&judgeResult=&courtLevel\
-=&procedureType=&zone=&keyword=%E5%90%83%E9%A5%AD&page={}'
+
+u='''http://openlaw.cn/search/judgement/default?type=&typeValue=&courtId=&lawFirmId=&lawyerId=&docTy
+pe=&causeId=&judgeDateYear=&lawSearch=&litigationType=&judgeId=&procedureType=&judgeResult=&courtLevel
+=&procedureType=&zone=&keyword=%E5%90%83%E9%A5%AD&page={}'''
+
 for i in range(1,5):
     print(u.format(i))
     r=se.get(u.format(i),headers={'user-agent':ffu.random})
