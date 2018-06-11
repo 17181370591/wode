@@ -1,7 +1,12 @@
+#https://passport.lagou.com/login/login.html
+#fiddler里headers栏里貌似全部属于headers，这次的必须参数在headers里的 Miscellaneous 里
+#方法是先get访问z，获取html里的两个参数，然后加入headers，在post访问ul
+
 import requests,fake_useragent as fk,time,re
 def login():
     ua=fk.UserAgent()
     se=requests.session()
+    
     se.headers.update({'user-agent':ua.random})
     d={'isValidate':'true',
        'password':'d2e7c5f925057f7f49797c6ee0757ac6',
@@ -9,7 +14,7 @@ def login():
        'submit':'',
        'username':'17010075310',
        }
-    print('d=',d)
+
     z='https://passport.lagou.com/login/login.json'
     ul='https://passport.lagou.com/login/login.html'    
     r2=se.get(ul)
