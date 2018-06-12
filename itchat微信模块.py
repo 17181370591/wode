@@ -1,4 +1,5 @@
 #https://www.cnblogs.com/ouyangping/p/8453920.html
+#已经会使用登录登出，发文字文件图片信息，群发，获取朋友列表，公众号列表
 
 import itchat as wx, time
 from itchat.content import *
@@ -39,7 +40,7 @@ wx.search_friends(name='柴小起')
 wx.search_friends(wechatAccount='littlecodersh')
 
 
-wx.get_mps()        #将返回完整的工作号列表
+wx.get_mps()        #将返回完整的工作号列表（通讯录里的公众号）
 
 
 get_chatrooms        #返回完整的群聊列表.
