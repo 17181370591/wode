@@ -1,3 +1,5 @@
+#据说密码使用了rsa加密，但不会破解
+
 # -*- coding:utf-8 -*-
 import re,execjs,os
 import requests,time
