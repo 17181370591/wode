@@ -26,7 +26,7 @@ bg_pic_array=np.array(bg_pic)           #背景图需要array格式
 
 #max_words表示热图里词的最大数量，默认200；font_path表示热图里词的字体，显示中文时必须设置否则汉字会变成方框；
 #width，height表示画布属性，与mask（背景图片）冲突，scale表示mask的按比例缩放的值默认1
-#background_color表示背景颜色，估计也与nask冲突
+#background_color表示背景颜色
 pic= wc.WordCloud(max_words=77,font_path=fpath
                   width=1000,height=100, mask=bg_pic_array,background_color='black',scale=1,).generate(text)
 
