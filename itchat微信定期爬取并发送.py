@@ -19,5 +19,7 @@ while True:
         s=r[0].xpath('string(.)')               
     except Exception as e:
         s=e
+    print(time.strftime('%Y-%m-%d,%H:%M:%S'))
+    print(s,'\n','='*11)
     f.send_msg(s)  
     time.sleep(600)
