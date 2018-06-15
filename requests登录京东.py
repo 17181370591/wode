@@ -38,7 +38,8 @@ if 'rue' in z.text:
     
 pw='''OYu8r2AQTs9zo7Zm+7xs3JM96rdA7iYN+btGefhPS2Z3al5dUyQ5zHRtn/yoh5iNpQoqZRcKs84wxJo+
 Iy6dgaTw0PhLB3HMw0bdUdgfTBl+NCj4KyG48j+HX+KjWU1wNFttQD+7bupaCouVsu5ek8ubb32Ze0+OOJwxZyj6Dyk='''
-d={'eid':eid,   'fp':fp,'_t':'_t','authcode':cc,‘’uuid':uuid,'loginType':'c','loginname':'1339574****',
+d={'eid':eid,   'fp':fp,'_t':'_t','authcode':cc,‘’uuid':uuid,
+   'loginType':'c','loginname':'1339574****',
    'nloginpwd':pw,'pubKey':pubKey,'sa_token':sa_token}
 print('post提交的数据是：',d)
 
