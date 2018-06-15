@@ -11,7 +11,6 @@ se = requests.session()
 se.headers.update({'user-agent':ua.random})
 
 u1=r'https://passport.jd.com/new/login.aspx'            #登录页面
-
 r1=etree.HTML(se.get(u1).text)          #打开登录页面获取参数
 
 uuid=r1.xpath('//input[@id="uuid"]')[0].attrib['value']
@@ -19,6 +18,8 @@ eid=r1.xpath('//input[@id="eid"]')[0].attrib['value']
 fp=r1.xpath('//input[@id="sessionId"]')[0].attrib['value']
 pubKey=r1.xpath('//input[@id="pubKey"]')[0].attrib['value']
 sa_token=r1.xpath('//input[@id="sa_token"]')[0].attrib['value']
+
+
 
 #登录部分开始
 #判断有没有验证码，如果u00返回true就要验证码
@@ -54,26 +55,33 @@ if 'emptyAuthcode' in r2:
 
 #ou1是订单的html源码页面，html里有商品的数量，收货人等信息；页面的js里有订单号等信息；
 #商品是由json获得，获取地址是ou2，post的data就在ou1的js里
-#注意这里的订单都是2016年的！！！获取近期订单要去掉对应的参数
-
-ou1=r'https://order.jd.com/center/list.action?search=0&d=2016&s=4096&page={}'
-def get_p(page):                    #获取ou1的参数，返回字典
+#注意这里的订单都是2016年的！！！获取近期订单要去掉对应的参数    
+def get_p(page):                #获取ou1的参数，返回字典
     oh=se.headers.copy()
-    or1=se.get(ou1.format(page))
+    or1=se.get(ou1.format(page))                    
     ot1=or1.text
     with open('1.txt','w',encoding='utf-8') as f:
         f.write(ot1)
-    orderWareIds=re.search(re.compile(r"orderWareIds']='([0-9,]+)';"),ot1).group(1)
-    orderWareTypes=re.search(re.compile(r"orderWareTypes']='([0-9,]+)';"),ot1).group(1)
-    orderIds=re.search(re.compile(r"orderIds']='([0-9,]+)';"),ot1).group(1)
-    orderTypes=re.search(re.compile(r"orderTypes']='([0-9,]+)';"),ot1).group(1)
-    orderSiteIds=re.search(re.compile(r"orderSiteIds']='([0-9,]+)';"),ot1).group(1)
+    orderWareIds=re.search(re.compile(r"orderWareIds']='([0-9,]+)';"
+),ot1).group(1)
+    orderWareTypes=re.search(re.compile(r"orderWareTypes']='([0-9,]+)';"
+),ot1).group(1)
+    orderIds=re.search(re.compile(r"orderIds']='([0-9,]+)';"
+),ot1).group(1)
+    orderTypes=re.search(re.compile(r"orderTypes']='([0-9,]+)';"
+),ot1).group(1)
+    orderSiteIds=re.search(re.compile(r"orderSiteIds']='([0-9,]+)';"
+),ot1).group(1)
     data={'orderWareIds':orderWareIds,'orderWareTypes':orderWareTypes,
           'orderIds':orderIds,'orderTypes':orderTypes,'orderSiteIds':orderSiteIds}
     return data
 
+
+
+
 #ou2是商品信息的获取页面
 ou2=r'https://order.jd.com/lazy/getOrderProductInfo.action'
+
 def get_order(ou2,page,data):
     oh2=se.headers.copy()
     oh2.update({'Referer':ou1.format(page)})
@@ -81,23 +89,34 @@ def get_order(ou2,page,data):
     ot2=or2.json()
     print('当前第{}也'.format(page))
     for i in ot2:
-        print(i['name'])            #打印商品名称
+        print(i['name'])
+     
+    
+    
 
-#从第一页开始打印商品信息，打印到最后一页
-page=1 
-while True:
-    try:
-        data=get_p(page)
-        get_order(ou2,page,data)
-        page+=1
-    except AttributeError as e:
-        print(e)
-        break
+#修改购物车，sel选择修改方式，分别是选择，取消选择和修改数量
+#sku是京东的商品编号，每个商品的url里
+#cuxiao是该商品在购物车的促销方案id，在对应的促销商品页面的url里，没有促销就是0
+#ptype是商品的类别，不知道怎么用代码获取，目前知道食品是11，非食品是13
+#pcount是修改数量后的数量
+#loc不明，只见过两个值'1-72-2819'和1-72-2819-0'，但目前可以只用前面那个
 
-        
+def set_bus(sel,sku,cuxiao,ptype,pcount='',loc='1-72-2819'):
+    #sel=['selectItem','cancelItem','changeNum']
+    u=r'https://cart.jd.com/{}.action'.format(sel)
+    data={'pid':sku,'ptype':ptype,'packId':0,
+          'targetId':cuxiao,'promoID':cuxiao,'pcount':pcount,
+          'venderId':8888, 'manFanZeng':1,'t':0,
+          'locationId':loc,'random':0.6767341536461526}
+    r=se.post(u,data=data)
+    return r
+
+
+
+
 #下单。京东下单的一种流程是：先加入购物车，将被购买的商品勾选，然后post数据到u_buy购买，
 #数据submitOrderParam.trackId不知道怎么获得，复制了一个，但是应该是md5加密编码，
-#riskControl可以从u_bus获取，u_bus是订单确认前最后的页面，也是在购物车点提交后的页面
+#riskControl可以从u_bus获取，u_bus是订单确认前最后的页面，也是在购物车点提交后的页面   
 def buy():
     u_bus=r'https://cart.jd.com/cart.action?r=0.8322363310165506'
     def get_bus(u_bus):
@@ -112,4 +131,20 @@ def buy():
         'submitOrderParam.btSupport':0,'submitOrderParam.jxj':1,
         'submitOrderParam.trackId':'c0cba34b9e0a42c1d15fd37903d1ca98','riskControl':riskControl}
     r_buy=se.post(u_buy,data=bd)
-    pritn(len(r_buy.text)
+    pritn(len(r_buy.text))
+          
+'''
+#从第一页开始打印商品信息，打印到最后一页
+ou1=r'https://order.jd.com/center/list.action?search=0&d=2016&s=4096&page={}'
+ou2=r'https://order.jd.com/lazy/getOrderProductInfo.action'
+
+page=1 
+while True:
+    try:
+        data=get_p(page)
+        get_order(ou2,page,data)
+        page+=1
+    except AttributeError as e:
+        print(e)
+        break
+'''
