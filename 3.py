@@ -20,6 +20,7 @@ fp=r1.xpath('//input[@id="sessionId"]')[0].attrib['value']
 pubKey=r1.xpath('//input[@id="pubKey"]')[0].attrib['value']
 sa_token=r1.xpath('//input[@id="sa_token"]')[0].attrib['value']
 
+#登录部分开始
 #判断有没有验证码，如果u00返回true就要验证码
 u00=r'https://passport.jd.com/uc/showAuthCode'
 z=se.get(u00)
@@ -46,26 +47,33 @@ r2=se.post(u2,data=d).text
 print('登录结果是：',r2)
 if 'emptyAuthcode' in r2:
     quit()
+#登录部分结束，如果登录失败，退出程序
+
+
+
+
+#ou1是订单的html源码页面，html里有商品的数量，收货人等信息；页面的js里有订单号等信息；
+#商品是由json获得，获取地址是ou2，post的data就在ou1的js里
+#注意这里的订单都是2016年的！！！获取近期订单要去掉对应的参数
 
 ou1=r'https://order.jd.com/center/list.action?search=0&d=2016&s=4096&page={}'
-def get_p(page):    
+def get_p(page):                    #获取ou1的参数，返回字典
     oh=se.headers.copy()
-    #oh.update({'referer':'https://passport.jd.com/uc/login?ReturnUrl=https%3A%2F%2Forder.jd.com%2Fcenter%2Flist.action'})
     or1=se.get(ou1.format(page))
     ot1=or1.text
     with open('1.txt','w',encoding='utf-8') as f:
         f.write(ot1)
-    orderWareIds=re.search(re.compile(r"orderWareIds']='([0-9,]+)';"),ot1).group(1)
-    orderWareTypes=re.search(re.compile(r"orderWareTypes']='([0-9,]+)';"),ot1).group(1)
-    orderIds=re.search(re.compile(r"orderIds']='([0-9,]+)';"),ot1).group(1)
-    orderTypes=re.search(re.compile(r"orderTypes']='([0-9,]+)';"),ot1).group(1)
-    orderSiteIds=re.search(re.compile(r"orderSiteIds']='([0-9,]+)';"),ot1).group(1)
+    orderWareIds=re.search(re.compile(r"orderWareIds']='([0-9,]+)';"),ot1).group(1)
+    orderWareTypes=re.search(re.compile(r"orderWareTypes']='([0-9,]+)';"),ot1).group(1)
+    orderIds=re.search(re.compile(r"orderIds']='([0-9,]+)';"),ot1).group(1)
+    orderTypes=re.search(re.compile(r"orderTypes']='([0-9,]+)';"),ot1).group(1)
+    orderSiteIds=re.search(re.compile(r"orderSiteIds']='([0-9,]+)';"),ot1).group(1)
     data={'orderWareIds':orderWareIds,'orderWareTypes':orderWareTypes,
           'orderIds':orderIds,'orderTypes':orderTypes,'orderSiteIds':orderSiteIds}
     return data
 
+#ou2是商品信息的获取页面
 ou2=r'https://order.jd.com/lazy/getOrderProductInfo.action'
-
 def get_order(ou2,page,data):
     oh2=se.headers.copy()
     oh2.update({'Referer':ou1.format(page)})
@@ -73,8 +81,9 @@ def get_order(ou2,page,data):
     ot2=or2.json()
     print('当前第{}也'.format(page))
     for i in ot2:
-        print(i['name'])
-        
+        print(i['name'])            #打印商品名称
+
+#从第一页开始打印商品信息，打印到最后一页
 page=1 
 while True:
     try:
@@ -85,6 +94,10 @@ while True:
         print(e)
         break
 
+        
+#下单。京东下单的一种流程是：先加入购物车，将被购买的商品勾选，然后post数据到u_buy购买，
+#数据submitOrderParam.trackId不知道怎么获得，复制了一个，但是应该是md5加密编码，
+#riskControl可以从u_bus获取，u_bus是订单确认前最后的页面，也是在购物车点提交后的页面
 def buy():
     u_bus=r'https://cart.jd.com/cart.action?r=0.8322363310165506'
     def get_bus(u_bus):
