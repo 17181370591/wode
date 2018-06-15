@@ -1,3 +1,5 @@
+#注意事项：使用前先修改账号，
+#第一次登录一定会提示没有输入验证码，但判断是否需要验证码的网页却返回false，原因不明，之后每次都要验证码才能登录
 #据说密码使用了rsa加密，但不会破解
 
 # -*- coding:utf-8 -*-
@@ -39,8 +41,8 @@ if 'rue' in z.text:
     cc=input('请输入验证码:')
     
 pw='''OYu8r2AQTs9zo7Zm+7xs3JM96rdA7iYN+btGefhPS2Z3al5dUyQ5zHRtn/yoh5iNpQoqZRcKs84wxJo+Iy6dgaTw0PhLB3HMw0bdUdgfTBl+NCj4KyG48j+HX+KjWU1wNFttQD+7bupaCouVsu5ek8ubb32Ze0+OOJwxZyj6Dyk='''
-d={'eid':eid,   'fp':fp,'_t':'_t','authcode':cc,'uuid':uuid,'loginType':'c','loginname':'13395747825',
-   'nloginpwd':pw,'pubKey':pubKey,'sa_token':sa_token}
+d={'eid':eid,   'fp':fp,'_t':'_t','authcode':cc,'uuid':uuid,'loginType':'c',
+   'loginname':'1339574****','nloginpwd':pw,'pubKey':pubKey,'sa_token':sa_token}
 print('post提交的数据是：',d)
 
 u2=r'https://passport.jd.com/uc/loginService?uuid={}&&r=0.3738090767112452&version=2015'.format(uuid)
