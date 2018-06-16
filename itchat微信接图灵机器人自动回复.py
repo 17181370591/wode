@@ -1,6 +1,7 @@
 #coding=utf8
 import requests
 import itchat as wx
+#目前测试可以和三个账号同时聊天
 
 
 key = '7593ddd9947346e5ba8ff8832264ba50'
