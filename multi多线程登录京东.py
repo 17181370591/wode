@@ -64,7 +64,8 @@ def dl(name,pw):            #登录，返回session，参数是账号密码
 
 #方法1使用了multiprocessing.dummy的Pool，据说这是个线程池
 #方法2是常规的线程
-#使用常规进程multiprocessing.Process和进程池multiprocessing.Pool都不会等待输入验证码而报错，原因不明
+#使用常规进程multiprocessing.Process和进程池multiprocessing.Pool都不会等待输入验证码而报错，
+#原因是子进程没有标准输入。详情见：https://stackoverflow.com/questions/48851096/python-multiprocess
 
 import d,multiprocessing as mu,threading as th
 from multiprocessing.dummy import Pool as ThreadPool
