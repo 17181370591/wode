@@ -59,14 +59,17 @@ def pic2word(z):
     url = 'https://aip.baidubce.com/rest/2.0/ocr/v1/general?access_token=' + at
     img = base64.b64encode(z)
     r1=se.post(url,data=parse.urlencode({"image": img})).json()
-    r=r1['words_result']
-    le=len(r)                                       #￥￥
-    words=[i['words'] for i in r]
-    q=''.join(words[:le-4])
-    ans=words[le-4:]                                   #￥￥
-    print('='*22,'\n',q)
-    print(ans)     
-    return q,ans
+    try:
+        r=r1['words_result']
+        le=len(r)                                       #￥￥
+        if le!=5:
+            prinht('百度ocr识别words_result内容有{}项'.format(le))
+        words=[i['words'] for i in r]
+        q=''.join(words[:le-4])
+        ans=words[le-4:]                                   #￥￥
+        print('='*22,'\n',q)
+        print(ans)     
+        return q,ans
 
 
 
@@ -90,8 +93,8 @@ pica=(0+left,250+top,550+left,top+750)
 #传入pica，截图，返回图片在内存里的二进制数据
 def get_pic(pica):
     z=ImageGrab.grab(pica)          #ImageGrab.grab（pica）截取pica位置的图片，返回PIL.Image对象
-    print('pica=',pica)
-    print('lis=',lis)
+    #print('pica=',pica)
+    #print('lis=',lis)
     a1=z.getpixel((200,330))
     if a1[0]>200 and sum(a1)<400:           #图片坐标（200，330）满足一定条件说明处于休息状态，点击继续挑战答题
         ctypes.windll.user32.SetCursorPos(400+left,top+570)
