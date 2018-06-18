@@ -19,7 +19,11 @@ if __name__ == "__main__":
   print ('concurrent:') #创建多个进程，并行执行
   pool = Pool(5)  #创建拥有5个进程数量的进程池
   #testFL:要处理的数据列表，run：处理testFL列表中数据的函数
+  
   rl =pool.map(run, testFL) 
+  #上面这句也可以写成r1=[ pool1.apply_async(run,(i,)) for i in testFL ]
+  #pool1.apply_async不阻塞，pool1.apply阻塞
+  
   pool.close()#关闭进程池，不再接受新的进程
   pool.join()#主进程阻塞等待子进程的退出
   e2 = time.time()
