@@ -3,6 +3,7 @@
 #结论是：list在传入每个子进程时都传入副本，本身不受改变，
 #Manager().list()传入的是本身，修改都会发生变化，
 #线程池貌似传哪个都会改变自身
+#即进程间通信必须使用multiprocessing.Manager()里的结构，线程间通信暂时不明
 
 #测试list和Manager().list() 的不同，进程间数据传递
 import multiprocessing as mu
