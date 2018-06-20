@@ -6,6 +6,7 @@ import base64
 #抓包发现该网站的ip信息由proxy.js加载，下载js后发现由get_proxy_ip生成，使用execjs各种找不到对象，
 #在下载的js文件中get_proxy_ip里加入console语句，然后用fiddler的add rule，
 #将原js替换成本地的js，可在控制台查看各参数，d也是这么获取的，
+#替换方法可以是在想要替换的页面添加rule，可以复制该页面地址添加，也可以用正则表达式添加等
 #该函数又调用了同js的decode_str，这个函数用python写代码如下ds函数
 
 #hashlib函数的decodestring和encodestring已被替换成decodebytes和encodebytes，
