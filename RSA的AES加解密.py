@@ -25,7 +25,7 @@ class aesdemo:
         
         ciphertext = cryptor.encrypt(pad(plaintext))
         #print(cryptor.decrypt)会报错，提示decrypt() cannot be called after encrypt()
-        #似乎
+        #似乎创建的只能encrypt或者只能decrypt，交替使用会报错
         # 这里统一把加密后的字符串转化为16进制字符串
         return base64.b64encode(iv + ciphertext)
 
@@ -43,7 +43,30 @@ if __name__ == '__main__':
     # 密钥长度可以为128 / 192 / 256比特，这里采用128比特
     # 指定加密模式为CBC
     demo = aesdemo(b'keyven__keyven__', AES.MODE_CBC)
-    e = demo.encrypt('fuck you')
+    e = demo.encrypt('huaQ!!!')
     d = demo.decrypt(e)
     print ("加密：", e)
     print ("解密：", d)
+
+    
+===========================================================================
+
+#简化版（？）。key1,key2,m最大长度是16，超过的话要切割，不足则用pad填充
+
+key1,key2,m='key1','key2','huaQ!!!'
+
+def encrypt(key1,key2,m):
+    cryptor = AES.new(pad(key1), AES.MODE_CBC, pad(key2))
+    m1=cryptor.encrypt(pad(m))
+    print(m1)
+    return  m1
+    
+
+def decrypt(key1,key2,a):
+    cryptor = AES.new(pad(key1), AES.MODE_CBC, pad(key2))
+    m2=cryptor.decrypt(a)
+    print(m2)
+    return m2
+
+
+===========================================================================
