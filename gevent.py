@@ -38,6 +38,7 @@ if __name__=='__main__':
         th=threading.Thread(target=p,args=(i,))
         ts.append(th)
         th.start()
+    for th in ts:
         th.join()   
     print('多线程',time.clock()-t)
 
@@ -48,6 +49,7 @@ if __name__=='__main__':
         th=multiprocessing.Process(target=p,args=(i,))
         ts.append(th)
         th.start()
+    for th in ts:
         th.join()   
     print('多进程',time.clock()-t)
     '''
