@@ -1,4 +1,6 @@
 #coding=utf-8
+#非常详细的教程，包含了各种mode：https://blog.csdn.net/u013578500/article/details/77905924
+
 
 from Crypto.Cipher import AES
 import base64
