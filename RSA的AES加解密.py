@@ -38,7 +38,8 @@ class aesdemo:
         ciphertext = ciphertext[AES.block_size:len(ciphertext)]
         cryptor = AES.new(self.key, self.mode, iv)
         plaintext = cryptor.decrypt(ciphertext)
-        return plaintext.decode().rstrip()
+        return plaintext.decode().rstrip('\0')          
+        #上面这里必须加'\0'，不然不会删除，原因似乎是默认的strip只删除'\s\t\n'
 
 # 测试模块
 if __name__ == '__main__':
@@ -66,7 +67,7 @@ def encrypt(key1,key2,m):
 
 def decrypt(key1,key2,a):
     cryptor = AES.new(pad(key1), AES.MODE_CBC, pad(key2))
-    m2=cryptor.decrypt(a)
+    m2=cryptor.decrypt(a).rstrip('\0')
     print(m2)
     return m2
 
