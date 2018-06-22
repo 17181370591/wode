@@ -5,7 +5,7 @@ monkey.patch_socket()
 monkey.patch_ssl()
 import threading,time,requests,multiprocessing,gevent
 from lxml import etree
-
+#多线程的join分开写后速度快很多，协程比上面都不用稍快
 
 
 url='https://bbs.hupu.com/topic-{}'
