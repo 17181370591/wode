@@ -42,7 +42,8 @@ import aiohttp,asyncio,fake_useragent as fu,time,requests
 from lxml import etree
 
 name2='171813703**'
-pw2='Ts9dwzYIDhqlyy2GGPl4lVzrkSDQqMfplLURPFpLDZwwe5/iadXJ1zpKn9dbfjTEmCpmTtz6VJjJbxX8Mv6NwxkpxAizji8kYJitdElklTXY/x3EWgYCyAbYUAKpm0aA9I7pHRmxnlSPQZnloVdiyfWSqoXDhuDCydH+SDl+qXM='
+pw2='''Ts9dwzYIDhqlyy2GGPl4lVzrkSDQqMfplLURPFpLDZwwe5/iadXJ1zpKn9dbfjTEmCpmTtz6VJjJbxX8Mv
+    6NwxkpxAizji8kYJitdElklTXY/x3EWgYCyAbYUAKpm0aA9I7pHRmxnlSPQZnloVdiyfWSqoXDhuDCydH+SDl+qXM='''
 
 u1=r'https://passport.jd.com/new/login.aspx' 
 pw='''OYu8r2AQTs9zo7Zm+7xs3JM96rdA7iYN+btGefhPS2Z3al5dUyQ5zHRtn/yoh5iNpQoqZRcKs84wxJo+
@@ -75,7 +76,8 @@ async def f(se,u,user,pw):
 #post方法登录
 
 async def p(se,d,fh):
-    u2=r'https://passport.jd.com/uc/loginService?uuid={}&&r=0.3738090767112452&version=2015'.format(d['uuid'])
+    u2=r'https://passport.jd.com/uc/loginService?uuid={}&&r=0.3738090767112452&version=2015'
+                    .format(d['uuid'])
     async with se.post(u2,data=d) as r2:
         x=await r2.text()
         print(x)
