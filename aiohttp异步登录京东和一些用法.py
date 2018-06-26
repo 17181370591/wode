@@ -30,6 +30,25 @@ params = [('key', 'value1'), ('key', 'value2')]         #get传参数方法2，�
 async with session.get('http://httpbin.org/get',
     params=params) as r:
     assert r.url == 'http://httpbin.org/get?key=value2&key=value1'
+    
+    
+ua=fu.UserAgent().random
+async def main():
+    url = 'http://httpbin.org/cookies'
+    cookies = {'cookies_are': 'working'}
+    async with aiohttp.ClientSession(cookies=cookies,headers={'user-agent':ua}) as session:
+        payload = {'key1': 'value1', 'key2': 'value2'}
+        async with session.post('http://httpbin.org/post',data=payload) as resp:
+            print(await resp.json())           
+>>>{'args': {}, 'data': '', 'files': {},'form': {'key1': 'value1', 'key2': 'value2'},
+'headers': {'Accept': '*/*', 'Accept-Encoding': 'gzip, deflate','Connection': 'close', 
+'Content-Length': '23','Content-Type': 'application/x-www-form-urlencoded',
+'Cookie': 'cookies_are=working', 'Host': 'httpbin.org',
+'User-Agent': 'Mozilla/5.0 (Windows; U; Windows NT 5.1; zh-TW)
+AppleWebKit/533.19.4 (KHTML, like Gecko) Version/5.0.2 Safari/533.18.5'},
+'json': None, 'origin': '42.49.233.253', 'url': 'http://httpbin.org/post'}
+
+    
 '''
 
 
