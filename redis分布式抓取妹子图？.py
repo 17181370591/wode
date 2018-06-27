@@ -38,6 +38,7 @@ loop.run_until_complete(asyncio.ensure_future(push_redis_list(0,nu)))
 print(time.clock()-t1)
 
 #=====================================================================
+#可以放在其他电脑上运行
 #从redis的mz里pop图片地址url，分配下载
          
          
