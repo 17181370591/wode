@@ -2,6 +2,13 @@
 #cd C:\Users\Administrator\Desktop\1\proj
 #celery -A www worker -l info  -P eventlet
 
+'''
+celeryconfig.py
+
+BROKER_URL = 'redis://:asd123@localhost//'
+'''
+
+
 import time
 from celery import Celery
 app = Celery('www',
@@ -19,3 +26,6 @@ def f():
         print('*'*8)
         time.sleep(1)
     print(r.get())
+
+
+f()
