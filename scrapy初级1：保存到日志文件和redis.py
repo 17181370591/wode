@@ -57,6 +57,10 @@ class Test1Item(scrapy.Item):
 # -*- coding: utf-8 -*-
 
 from redis import Redis
+
+import logging
+logger = logging.getLogger(__name__)
+
 class Test1Pipeline(object):
     def __init__(self):
         self.i = 0
@@ -71,6 +75,7 @@ class Test1Pipeline(object):
         print(self.i,spider.name)
         self.i+=1
         self.r.sadd('a',item['tag']+'@@@'+item['content'])
+        logger.warning(item)                                #打印日志，item默认会以debug形式打印
         return item
 
 #================================================================================
@@ -78,5 +83,18 @@ class Test1Pipeline(object):
 #settings.py
 ITEM_PIPELINES = {
    'test1.pipelines.Test1Pipeline': 300,
+}
+
+
+LOG_LEVEL = 'DEBUG'                 #设置日志输出的最低标准
+LOG_FILE = 'new.txt'                #日志保存位置
+
+
+import fake_useragent               #设置请求头
+ua=fake_useragent.UserAgent()
+DEFAULT_REQUEST_HEADERS = {
+  'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'Accept-Language': 'en',
+    'user-agent':ua.random
 }
 #================================================================================
