@@ -14,7 +14,7 @@ test1/
 import scrapy
 from ..items import Test1Item
 
-class GanJiSpider(scrapy.Spider):
+class SMSpider(scrapy.Spider):
     name='smzdm'
     start_urls=['https://www.smzdm.com/fenlei/xinyongka/',
                 'https://www.smzdm.com/fenlei/xinyongka/p2/#feed-main']
@@ -78,11 +78,18 @@ class Test1Pipeline(object):
         logger.warning(item)                                #打印日志，item默认会以debug形式打印
         return item
 
+class Test2Pipeline(object):
+    def process_item(self, item, spider):        
+        with open('1.txt','a',encoding='utf8') as f:
+            f.write(item['tag']+'@@@'+item['content']+'\n')
+        return items   
+    
 #================================================================================
 #================================================================================
 #settings.py
 ITEM_PIPELINES = {
    'test1.pipelines.Test1Pipeline': 300,
+    'test1.pipelines.Test2Pipeline': 400,       #有教程说这两个值要不同，但似乎可以相同
 }
 
 
