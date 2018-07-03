@@ -10,7 +10,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 import logging
 
-class MySpider(CrawlSpider):
+class MySpider(CrawlSpider):            #这里不能写scrapy.Spider
     name = 'Hupu'
     allowed_domains = []
     start_urls = ['https://bbs.hupu.com/topic']
