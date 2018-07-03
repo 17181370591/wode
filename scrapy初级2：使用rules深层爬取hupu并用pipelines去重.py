@@ -5,6 +5,10 @@
 #而follow=True表示找完start_urls里满足正则的链接，还要在这些链接里找满足正则的链接，
 #一直找下去，并且把所有访问过的链接的作者打印
 
+============================================================================
+
+#hupu.py，爬虫spider文件
+
 import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
@@ -26,5 +30,27 @@ class MySpider(CrawlSpider):            #这里不能写scrapy.Spider
         logging.error(response.url+'@'*8+x)
 
     
+============================================================================
+#pipelines.py，用来处理spider yield的items
+#打开对应的redis集合，如果username的长度大于7且没有保存过，则保存
 
+import scrapy,logging,time,datetime
+from redis import Redis
+
+class HupuPipeline(object):
+    def __init__(self):
+        self.r=Redis(password='asd123')
+        self.r1=self.r.smembers('hupuname')
+
+    def process_item(self, items, spider):
+        x=items['t']
+        if len(x)>7 and x.encode() not in self.r1:
+            
+            self.r.sadd('hupuname',x)
+            #logging.error('self.r.scard(hupuname)={}'.format(self.r.scard('hupuname')))
+            
+            with open('2.txt','a',encoding='utf8') as f:
+                f.write(x+'\n')
+                
+            return items
     
