@@ -39,8 +39,8 @@ ITEM_PIPELINES = {
     'myproject.pipelines.PricePipeline': 300,
     'myproject.pipelines.JsonWriterPipeline': 800,
 }
-分配给每个类的整型值，确定了他们运行的顺序，item按数字从低到高的顺序，通过pipeline，
-通常将这些数字定义在0-1000范围内。
+分配给每个类的整型值，确定了他们运行的顺序，item按数字从低到高的顺序，
+，数字越小越优先，通过pipeline，通常将这些数字定义在0-1000范围内。
 '''
 
 
