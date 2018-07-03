@@ -31,6 +31,7 @@ class MySpider(CrawlSpider):            #这里不能写scrapy.Spider
 
     
 ============================================================================
+
 #pipelines.py，用来处理spider yield的items
 #打开对应的redis集合，如果username的长度大于7且没有保存过，则保存
 '''
