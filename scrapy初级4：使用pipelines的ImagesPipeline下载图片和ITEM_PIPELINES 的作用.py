@@ -1,5 +1,6 @@
 '''
 获取虎扑足球首页的帖子里第一页随机获取一个用户的用户名和头像，但是遇到头像地址相同的用户不会重复下载
+spider里设置了getLogger，同时在文件和控制台显示/保存日志
 设置ITEM_PIPELINES = {
     'Hupu.pipelines.HupuPipeline': 300,
     'Hupu.pipelines.HupupicPipeline':111,
