@@ -1,4 +1,5 @@
 '''
+获取虎扑足球首页的帖子里第一页随机获取一个用户的用户名和头像，但是遇到头像地址相同的用户不会重复下载
 设置ITEM_PIPELINES = {
     'Hupu.pipelines.HupuPipeline': 300,
     'Hupu.pipelines.HupupicPipeline':111,
@@ -14,7 +15,7 @@
 import scrapy
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
-import logging
+import logging,random
 from ..items import HupuItem
 
 def loo():
@@ -39,10 +40,9 @@ class MySpider(CrawlSpider):
     )
 
     def parse_item(self, response):
-        
         ps=response.xpath(r'//img[@src and @alt]')
-        if 1:
-            i=ps[-1]
+        if 1:                                       #这里以前使用了一个循环爬取第一页所有用户，不改回去了
+            i=random.choice(ps)
             it=HupuItem()
             x=i.xpath('@alt').extract_first()
             y=i.xpath('@src').extract_first()
