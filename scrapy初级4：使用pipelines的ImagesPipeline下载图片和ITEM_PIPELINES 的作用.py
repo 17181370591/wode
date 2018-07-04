@@ -18,7 +18,11 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 import logging,random
 from ..items import HupuItem
+from redis import Redis
 
+#使用redis验证收集到的用户信息是否正确，因为第一页一般有90多个用户，但下载的图片一般只有60多个，
+#使用redis，发现收集到 了90+用户的id的图片地址，但图片地址set去重后，发现确实只有60多个
+red=Redis(password='asd123')            
 def loo():
     logger=logging.getLogger()
     handler = logging.FileHandler("1.txt")
@@ -47,6 +51,8 @@ class MySpider(CrawlSpider):
             it=HupuItem()
             x=i.xpath('@alt').extract_first()
             y=i.xpath('@src').extract_first()
+            red.lpush('a',x)
+            red.lpush('b',y)
             lo.error(response.url+'@'*8+x+y)
             it['t']=x
             it['image_url']=y
