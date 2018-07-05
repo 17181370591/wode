@@ -1,7 +1,7 @@
 #hupu.py，爬虫spider文件
+#学到两个东西，一个是不断地用回调函数进行深度爬取，一个是可以完全不使用return，只用yield
 
 import scrapy
-
 
 class MySpider(scrapy.Spider):          
     name = 'Hupu'
