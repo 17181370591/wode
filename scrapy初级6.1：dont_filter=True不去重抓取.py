@@ -1,5 +1,7 @@
-from scrapy import Spider, Request, FormRequest
+#post_login访问'https://my.suning.com'时，抓包可以发现回访问两次（直接访问一次，重定向一次），
+#由于第二次才会抓取数据，第一次访问后第二次访问会被过滤，所以抓取不到数据，设置dont_filter=True即可
 
+from scrapy import Spider, Request, FormRequest
 
 class GithubLoginSpider(Spider):
     name = "gi"
@@ -14,7 +16,7 @@ class GithubLoginSpider(Spider):
         return [FormRequest("https://passport.suning.com/ids/login",
                         #meta = {'cookiejar' : 1},
                         formdata = {
-                            'username': '17198869121',
+                            'username': '1719886****',
                             'password2': 'jXO72fnk1zvqRYY+MXDyYm0HnkwzwJJc9TqN/0VlI1TkcaWBy5WVaEQ8edxzfvOGPKx4YMhDBzJk5EVso4svmVkxAjxgKOkCMXW+AcR88NblIqoers47Tvbiq3e32iZGwkIZvOb3LC3MnOQt9avE7TfmjXU6poeifgQYYTC6ePA=',
                             'jsonViewType':'true','password':'',
                             'loginTheme':'b2c','service':'','sceneId':'logonImg',
@@ -26,7 +28,7 @@ class GithubLoginSpider(Spider):
     def post_login(self, response):
         print('登录'*8,response.text)
         return Request('https://my.suning.com',
-                       callback=self.pa,dont_filter=True)
+                       callback=self.pa,dont_filter=True)       #不设置dont_filter=True抓不到数据
     def pa(self, response):      
         with open('1.txt', 'w',encoding='utf8')as f:
             f.write(response.text)
