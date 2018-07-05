@@ -31,7 +31,7 @@ ROBOTSTXT_OBEY = True
 DEFAULT_REQUEST_HEADERS = {
    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
    'Accept-Language': 'en',
-   'USER_AGENT ': 'fuck u 3 times'
+   'USER-AGENT ': 'fuck u 3 times'
 }
   
 IPS=["118.190.95.26:9001","183.48.91.107:8118",]
