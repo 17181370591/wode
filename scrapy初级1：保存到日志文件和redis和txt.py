@@ -1,3 +1,5 @@
+#settings.py里面要设置ROBOTSTXT_OBEY = False，不然有些网站会不爬取
+
 scrapy抓取什么值得买信用卡前两页的标题。目录如下
 test1/
     spiders/
@@ -92,6 +94,7 @@ ITEM_PIPELINES = {
     'test1.pipelines.Test2Pipeline': 400,       #有教程说这两个值要不同，但似乎可以相同
 }
 
+ROBOTSTXT_OBEY = False
 
 LOG_LEVEL = 'DEBUG'                 #设置日志输出的最低标准
 LOG_FILE = 'new.txt'                #日志保存位置
