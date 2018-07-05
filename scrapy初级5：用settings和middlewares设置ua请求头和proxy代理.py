@@ -26,7 +26,7 @@ BOT_NAME = 'Hupu'
 SPIDER_MODULES = ['Hupu.spiders']
 NEWSPIDER_MODULE = 'Hupu.spiders'
 
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 DEFAULT_REQUEST_HEADERS = {
    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
