@@ -70,7 +70,7 @@ NEWSPIDER_MODULE = 'Hupu.spiders'
 #LOG_LEVEL='DEBUG'
 #LOG_FILE='1.txt'
 
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 DEFAULT_REQUEST_HEADERS = {
    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
