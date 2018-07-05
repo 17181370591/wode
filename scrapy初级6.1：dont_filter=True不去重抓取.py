@@ -10,7 +10,6 @@ from scrapy import Spider, Request, FormRequest
 
 class GithubLoginSpider(Spider):
     name = "gi"
-    # post登入的必须要的头字段
     post_headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.75 Safari/537.36",
     }
@@ -27,9 +26,9 @@ class GithubLoginSpider(Spider):
                             'loginTheme':'b2c','service':'','sceneId':'logonImg',
                             'rememberMe':'true','client':'app',
                             },  
-                        callback = self.post_login)]  #添加了meta
+                        callback = self.post_login)]  
 
-    #FormRequeset出问题了
+
     def post_login(self, response):
         print('登录'*8,response.text)
         return Request('https://my.suning.com',
