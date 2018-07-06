@@ -1,3 +1,5 @@
+#http://www.cnblogs.com/Undo-self-blog/p/8424056.html
+
 import cv2
 import numpy as np
 
