@@ -33,10 +33,16 @@ def draw_circle(event,x,y,flags,param):
 
             
 img = np.zeros((512,512,3), np.uint8)
-cv2.namedWindow('image')                      #先创建窗口
+
+#下面这两句代码可以都放进while 1里，这样就相当于不停的创建窗口并绑定函数，
+#窗口有鼠标操作后就会在img上作画，而img的内容不受窗口影响，生成新窗口后继续在新窗口上展示。
+
+#先创建窗口，这里这句不能省略
+cv2.namedWindow('image')  
+#需要注意：这里窗口对象没有使用变量，而是单纯使用了字符串，推测这个库内部有将字符串到串口对象的映射
 cv2.setMouseCallback('image',draw_circle)
 
-while(1):
+while 1:
     cv2.imshow('image',img)
     k = cv2.waitKey(1) 
     if k == ord('m'):                    # 切换模式
