@@ -40,11 +40,11 @@ perimeter = cv2.arcLength(cnt,True)          #轮廓周长
 #下面是要获取近似轮廓，epsilon表示从原始轮廓到近似轮廓的最大距离，这里使用了轮廓周长的一个百分值，
 #epsilon越大，近似轮廓的点越少，approx是近似轮廓的numpy数组，
 #注意：drawContours第三个参数是-1表示绘制轮廓列表里的所有轮廓，现在需要绘制approx的所有点，
-#所以第二个参数给了list，也可以不给
+#所以第二个参数必须是list，否则会绘制出单个的点
 
 epsilon = 0.0001*cv2.arcLength(cnt,True)            
 approx = cv2.approxPolyDP(cnt,epsilon,True)
-img3= cv2.drawContours(img1, list(approx), -1, (0,0,255),2)
+img3= cv2.drawContours(img1, [approx], -1, (0,0,255),2)
 cv2.imshow('',img3)
 cv2.waitKey(0)
 cv2.destroyAllWindows()
