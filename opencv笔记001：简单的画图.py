@@ -3,6 +3,11 @@
 import numpy as np
 import cv2
 
+#设置窗口大小
+cv2.namedWindow('a',0)
+cv2.resizeWindow('a',500,500)
+cv2.imshow('a',img3)
+
 # Create a black image
 #这里一定要设置np.uint8，不然只要值大于0图片背景就是白色，原因不明。现在是灰色
 img = np.ones((512,512,3), np.uint8)*166                    
