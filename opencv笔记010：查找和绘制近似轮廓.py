@@ -42,7 +42,7 @@ perimeter = cv2.arcLength(cnt,True)          #轮廓周长
 #注意：drawContours第三个参数是-1表示绘制轮廓列表里的所有轮廓，现在需要绘制approx的所有点，
 #所以第二个参数必须是list，否则会绘制出单个的点
 
-epsilon = 0.0001*cv2.arcLength(cnt,True)            
+epsilon = 0.01*cv2.arcLength(cnt,True)            
 approx = cv2.approxPolyDP(cnt,epsilon,True)
 img3= cv2.drawContours(img1, [approx], -1, (0,0,255),2)
 cv2.imshow('',img3)
