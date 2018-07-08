@@ -14,9 +14,11 @@ import cv2
 
 def f(contours):            #这个函数用来查找轮廓列表里点数量最多的轮廓的索引
     x=0
+    p=0
     for i in range(len(contours)):
-        if len(contours[i])>x:
+        if len(contours[i])>p:
             x=i
+            p=len(contours[i])
     return x
 
 
