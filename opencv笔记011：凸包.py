@@ -53,5 +53,6 @@ img3= cv2.drawContours(img1, [hull], -1, (0,0,255),2)
 cv2.namedWindow('a',0)
 cv2.resizeWindow('a',500,500)
 cv2.imshow('a',img3)
-
+#凸性检测:函数 cv2.isContourConvex() 可以可以用来检测一个曲线是不是凸的。它只能返回 True 或 False。
+k = cv2.isContourConvex(cnt)
 
