@@ -68,7 +68,8 @@ def main():
     
     #下面这个方法实现了图到数组的转换，数组到图的转换用p1=Image.fromarray(d1）
     #q1，q2分别是两个验证码图的数组
-    #需要特别注意数组转换后的默认数据格式是uint8（查看方法是dtype），貌似只能表示0-255的整数，-3会自动转成253，所以用astype转换成int
+    #需要特别注意数组转换后的默认数据格式是uint8（查看方法是dtype），貌似只能表示0-255的整数，
+    #-3会自动转成253，所以用astype转换成int
     q1=np.array(Image.open('1.jpg')).astype(int)
     q2=np.array(Image.open('2.jpg')).astype(int)
     
@@ -84,7 +85,8 @@ def main():
     
     #接下来的思路是选择竖直坐标为x的一条横向，将横坐标小于66的作为被移动图形的横坐标集合，
     #将横坐标小于66的作为被填补图形的横坐标集合，y1和y2分别是这两个集合的均值
-    #q7是q6里竖直坐标为x的点在q6里的index的集合，x取q6的1/6处的点，因为验证码图1下部有汉字，导致后面大部分数据无法使用
+    #q7是q6里竖直坐标为x的点在q6里的index的集合，x取q6的1/6处的点，因为验证码图1下部有汉字，
+    #导致后面大部分数据无法使用
     #q6=q6[q7]是将q7作为index传给q6，更新q6成原来的q6竖直坐标为x的点的集合
     x=q6[int(q6.shape[0]/6)][0]
     q7=np.where(q6[:,0]==x)
@@ -127,7 +129,8 @@ while True:
     except Exception:
         pass
     try:
-        su=WebDriverWait(dr,3).until(EC.visibility_of_element_located((By.CLASS_NAME ,'dx_captcha_basic_lang_verify_success')))
+        su=WebDriverWait(dr,3).until(EC.visibility_of_element_located((By.CLASS_NAME ,
+                                         'dx_captcha_basic_lang_verify_success')))
         break
     except Exception as e:
         print('第{}次失败了，继续抓取'.format(count))
