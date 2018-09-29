@@ -1,4 +1,7 @@
 '''
+用tomcat测试发现，只要cookies里JSESSIONID一样，就会被服务器认为是同一个session。
+（session的地址一样，且对一个session设置attri，另一个id一样的session能访问该值。
+
 保存好的cookie有两种类型，
 第一种是列表，如
 [{'name':'a','value':'aaaa','path':'\','domain':'****','expiry':'***'},
