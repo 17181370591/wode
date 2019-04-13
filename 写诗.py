@@ -4,7 +4,7 @@ import operator,os,re,time
 random.seed(datetime.datetime.now())
 pp='/11.txt'
 def cj(pp):
-    txt=open(os.getcwd()+pp,'r+').read()
+    txt=open(os.getcwd()+pp,'r+',encoding='UTF-8').read()
     bd=['”','“','…','—','‘','’','\n']
     bd=r'”“…—‘’\n'
     txt=re.sub('[()（。. ，）"”阝“纟］：？…！—［扌‘’1234567890\n]','',txt)
@@ -34,7 +34,7 @@ def qz(dd):
             return z
 def xss(a,b=7):
     ddc=cj(pp)
-    txt=open(os.getcwd()+pp,'r+').read()
+    txt=open(os.getcwd()+pp,'r+',encoding='UTF-8').read()
     jz=''
     cc=random.choice(txt)
     for i in range(a):

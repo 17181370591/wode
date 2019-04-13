@@ -1,0 +1,9 @@
+1、创建工作空间
+	file-->new project-->pure python-->选择已存在的空文件夹，比如名字叫space
+2、file-->settings-->file encodings，全改成utf8
+3、file-->settings-->key map，修改快捷键
+4、file-->settings-->project:空间名(space)-->project interpreter可以修改解释器成
+	3.x版本，右边+号可以下载包，报错百度即可
+5、设置py文件脚本头：file-->settings-->file and code templates-->python scripts，
+	加上#!/user/bin/env python	#-*-coding:utf-8-*-	#time:${DATE}，
+	前两行目的是python2需要

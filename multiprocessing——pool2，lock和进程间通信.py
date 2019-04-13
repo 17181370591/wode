@@ -6,7 +6,6 @@
 #即进程间通信必须使用multiprocessing.Manager()里的结构，
 #线程间通信暂时不明，百度到的教程多使用queue的Queue队列，似乎说明不需要使用特殊的方法通信
 
-
 #测试list和Manager().list() 的不同，进程间数据传递
 import multiprocessing as mu
 import time
@@ -20,8 +19,7 @@ def g(l):
     while l:
         print(l.pop())
     print('===g===',l)
-    
-    pass
+
 if __name__ == "__main__":
     l=mu.Manager().list()       
     #l=[]        

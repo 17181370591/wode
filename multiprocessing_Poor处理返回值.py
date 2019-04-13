@@ -3,7 +3,7 @@
 
 import time
 from multiprocessing import Pool as P1
-from multiprocessing。dummy import Pool as P2
+from multiprocessing.dummy import Pool as P2
 def run(fn):
   #fn: 函数参数是数据列表的一个元素
   time.sleep(1)
