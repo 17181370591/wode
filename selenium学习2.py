@@ -80,6 +80,7 @@ e(dr)
 #运行js代码，滚动滚动条
 dr.execute_script('window.scrollTo(0,document.body.scrollHeight)')
 dr.execute_script('window.scrollTo(110,0)')
+dr.execute_script('document.documentElement.scrollTop=document.body.scrollHeight')
 #jquery代码
 dr.execute_script('$(window).scrollTop($("html").height());')
 

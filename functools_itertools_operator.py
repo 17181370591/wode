@@ -46,6 +46,8 @@ print(a,b,c)
 #=>[1, 2, 3, 4, 5],[1, 3, 6, 10, 15],[1, 2, 6, 24, 120]
 
 
+#非常重要，和permutations互补，permutations从n个不同的数选m(m<n)个，
+#product(n,repeat=m)返回从n个(可以相同)选m(m可以大于n)个所有可能情况，共n**m个，记得repeat不能省略
 #product(iter1,iter2, ... iterN, [repeat=1]);创建一个迭代器，生成表示item1，
 # item2等中的项目的笛卡尔积的元组，repeat是一个关键字参数，指定重复生成序列的次数
 a=itertools.product('ABCD', 'xy')
